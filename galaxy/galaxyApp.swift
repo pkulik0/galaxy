@@ -11,7 +11,7 @@ import SwiftUI
 struct galaxyApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StreamView()
         }
     }
 }
