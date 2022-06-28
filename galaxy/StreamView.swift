@@ -10,13 +10,14 @@ import AVKit
 
 struct StreamView: View {
     
-    @State private var channelName = "HasanAbi"
-    @State private var url: URL?
+    @State private var channelName = "Lewus"
     
     @State private var streams: [String:String] = [:]
     @State private var quality = ""
     
-    @State var chatMsg: [String] = ["abc"]
+    @State private var chatMsg: [String] = ["chat"]
+    
+    @State private var showPlayer = true
     
     private var sortedStreamsKeys: [String] {
         func parseQuality(_ quality: String) -> Int {
@@ -51,14 +52,44 @@ struct StreamView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            VStack {
-                if let avplayer = avplayer {
-                    VideoPlayer(player: avplayer)
+            Group {
+                if showPlayer {
+                    Group {
+                        if let avplayer = avplayer {
+                            VideoPlayer(player: avplayer)
+                        } else {
+                            ProgressView()
+                        }
+                    }
+                    .frame(width: playerSize.width, height: playerSize.height)
                 } else {
-                    ProgressView()
+                    Button {
+                        quality = sortedStreamsKeys.first ?? ""
+                    } label: {
+                        HStack {
+                            Image(systemName: "speaker.wave.2.fill")
+                                .font(.title2)
+                            
+                            VStack {
+                                Text("Audio Only Mode")
+                                    .font(.headline)
+                                Text("Tap to disable.")
+                                    .font(.subheadline)
+                            }
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.primary.opacity(0.1))
+                    }
+                    .buttonStyle(.plain)
                 }
             }
-            .frame(width: playerSize.width, height: playerSize.height)
+            .onChange(of: quality) { quality in
+                updatePlayer()
+                withAnimation {
+                    showPlayer = quality != "audio_only"
+                }
+            }
             
             HStack {
                 HStack(spacing: 5) {
@@ -67,25 +98,33 @@ struct StreamView: View {
                     TextField("Channel", text: $channelName)
                         .onSubmit {
                             Task {
-                                await changeChannel()
+                                await fetchData()
                             }
                         }
+                    
+                    Button {
+                        Task {
+                            await fetchData()
+                        }
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                            .foregroundColor(.secondary)
+                    }
                 }
 
-                if let _ = avplayer {
-                    Menu {
-                        Picker("Quality", selection: $quality) {
-                            ForEach(sortedStreamsKeys, id: \.self) { quality in
+                Menu {
+                    Picker("Quality", selection: $quality) {
+                        ForEach(sortedStreamsKeys, id: \.self) { quality in
+                            if quality == "audio_only" {
+                                Label("Audio Only", systemImage: "speaker.wave.2.fill")
+                            } else {
                                 Text(quality)
                             }
                         }
-                        .onChange(of: quality) { _ in
-                            updatePlayer()
-                        }
-                    } label: {
-                        Image(systemName: "gear")
-                            .foregroundColor(.secondary)
                     }
+                } label: {
+                    Image(systemName: "gear")
+                        .foregroundColor(.secondary)
                 }
             }
             .padding(.vertical, 10)
@@ -108,35 +147,24 @@ struct StreamView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .onChange(of: chatMsg) { _ in
-                    reader.scrollTo("bottom")
-                }
-            }
-            .task {
-                Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
-                    chatMsg.append("\(Int.random(in: 0...100))_\(Int.random(in: 0...100))_\(Int.random(in: 0...100))")
-                    chatMsg.append("\(Int.random(in: 0...100))_\(Int.random(in: 0...100))_\(Int.random(in: 0...100))")
-                    chatMsg.append("\(Int.random(in: 0...100))_\(Int.random(in: 0...100))_\(Int.random(in: 0...100))")
+                    withAnimation {
+                        reader.scrollTo("bottom")
+                    }
                 }
             }
             
             Spacer()
         }
         .task {
-            await changeChannel()
+            await fetchData()
         }
-    }
-    
-    func changeChannel() async {
-        url = URL(string: "http://127.0.0.1:5000/\(channelName)")!
-        await fetchData()
-        updatePlayer()
     }
     
     func updatePlayer() {
         guard let streamUrlString = streams[quality] else {
             return
         }
-        
+
         guard let url = URL(string: streamUrlString) else {
             return
         }
@@ -151,7 +179,7 @@ struct StreamView: View {
     }
     
     func fetchData() async {
-        guard let url = url else {
+        guard let url = URL(string: "http://192.168.0.119:5000/\(channelName)") else {
             print("Invalid url")
             return
         }
@@ -163,8 +191,8 @@ struct StreamView: View {
                 decodedData.removeValue(forKey: "worst")
                 decodedData.removeValue(forKey: "best")
                 streams = decodedData
+                quality = "none"
                 quality = sortedStreamsKeys.first ?? ""
-                updatePlayer()
             }
         } catch {
             print("Invaild data")
