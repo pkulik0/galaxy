@@ -8,17 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86844286A477C00EFAFCE /* galaxyApp.swift */; };
-		D6F86847286A477C00EFAFCE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86846286A477C00EFAFCE /* ContentView.swift */; };
+		D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86846286A477C00EFAFCE /* StreamView.swift */; };
 		D6F86849286A477E00EFAFCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6F86848286A477E00EFAFCE /* Assets.xcassets */; };
 		D6F8684C286A477E00EFAFCE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6F8684B286A477E00EFAFCE /* Preview Assets.xcassets */; };
+		D6F86853286A809200EFAFCE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = D6F86852286A809200EFAFCE /* README.md */; };
+		D6F86855286A809800EFAFCE /* server in Resources */ = {isa = PBXBuildFile; fileRef = D6F86854286A809800EFAFCE /* server */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		D6F86841286A477C00EFAFCE /* galaxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = galaxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6F86844286A477C00EFAFCE /* galaxyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = galaxyApp.swift; sourceTree = "<group>"; };
-		D6F86846286A477C00EFAFCE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D6F86846286A477C00EFAFCE /* StreamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamView.swift; sourceTree = "<group>"; };
 		D6F86848286A477E00EFAFCE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D6F8684B286A477E00EFAFCE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D6F86852286A809200EFAFCE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D6F86854286A809800EFAFCE /* server */ = {isa = PBXFileReference; lastKnownFileType = folder; path = server; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +39,8 @@
 		D6F86838286A477C00EFAFCE = {
 			isa = PBXGroup;
 			children = (
+				D6F86852286A809200EFAFCE /* README.md */,
+				D6F86854286A809800EFAFCE /* server */,
 				D6F86843286A477C00EFAFCE /* galaxy */,
 				D6F86842286A477C00EFAFCE /* Products */,
 			);
@@ -52,7 +58,7 @@
 			isa = PBXGroup;
 			children = (
 				D6F86844286A477C00EFAFCE /* galaxyApp.swift */,
-				D6F86846286A477C00EFAFCE /* ContentView.swift */,
+				D6F86846286A477C00EFAFCE /* StreamView.swift */,
 				D6F86848286A477E00EFAFCE /* Assets.xcassets */,
 				D6F8684A286A477E00EFAFCE /* Preview Content */,
 			);
@@ -125,6 +131,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D6F86853286A809200EFAFCE /* README.md in Resources */,
+				D6F86855286A809800EFAFCE /* server in Resources */,
 				D6F8684C286A477E00EFAFCE /* Preview Assets.xcassets in Resources */,
 				D6F86849286A477E00EFAFCE /* Assets.xcassets in Resources */,
 			);
@@ -137,7 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D6F86847286A477C00EFAFCE /* ContentView.swift in Sources */,
+				D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */,
 				D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
