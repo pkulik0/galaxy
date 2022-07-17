@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import SwiftTwitchAPI
 
 @main
 struct galaxyApp: App {
+    let twitchManager = TwitchManager()
+
     var body: some Scene {
         WindowGroup {
-            StreamView()
+            RootView()
+                .environmentObject(twitchManager)
         }
     }
 }
