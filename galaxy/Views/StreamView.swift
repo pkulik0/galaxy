@@ -7,16 +7,17 @@
 
 import SwiftUI
 import AVKit
+import SwiftTwitchAPI
 
 struct StreamView: View {
-    
-    @State private var channelName = "Lewus"
+    @EnvironmentObject private var twitchManager: TwitchManager
+    @State var channelName: String
     
     @State private var streams: [String:String] = [:]
     @State private var quality = ""
     
     @State private var chatMsg: [String] = ["chat"]
-    
+
     @State private var showPlayer = true
     
     private var sortedStreamsKeys: [String] {
@@ -27,7 +28,6 @@ struct StreamView: View {
             if index == quality.index(quality.endIndex, offsetBy: -2) {
                 qualityNumber += 1
             }
-    
             return qualityNumber
         }
         
@@ -179,7 +179,7 @@ struct StreamView: View {
     }
     
     func fetchData() async {
-        guard let url = URL(string: "http://192.168.0.119:5000/\(channelName)") else {
+        guard let url = URL(string: "http://127.0.0.1:5000/\(channelName)") else {
             print("Invalid url")
             return
         }
@@ -197,12 +197,6 @@ struct StreamView: View {
         } catch {
             print("Invaild data")
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        StreamView()
     }
 }
 
