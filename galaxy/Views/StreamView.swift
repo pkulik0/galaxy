@@ -20,6 +20,8 @@ struct StreamView: View {
 
     @State private var showPlayer = true
     
+    @Environment(\.dismiss) private var dismiss
+    
     private var sortedStreamsKeys: [String] {
         func parseQuality(_ quality: String) -> Int {
             let index = quality.lastIndex(of: "p") ?? quality.endIndex
@@ -49,6 +51,27 @@ struct StreamView: View {
         let heigth = UIScreen.main.bounds.width / 16 * 9
         return CGSize(width: width, height: heigth)
     }
+    
+    @State private var dragOffset: CGSize = CGSize.zero
+    
+    var drag: some Gesture {
+        DragGesture()
+            .onEnded { value in
+                print(value.translation)
+                if value.translation.height > 100 {
+                    dismiss()
+                } else {
+                    dragOffset = .zero
+                }
+            }
+            .onChanged { value in
+                withAnimation {
+                    if value.translation.height > 0 {
+                        dragOffset.height = value.translation.height
+                    }
+                }
+            }
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -58,7 +81,10 @@ struct StreamView: View {
                         if let avplayer = avplayer {
                             VideoPlayer(player: avplayer)
                         } else {
-                            ProgressView()
+                            ZStack {
+                                Color(uiColor: UIColor.systemBackground)
+                                ProgressView()
+                            }
                         }
                     }
                     .frame(width: playerSize.width, height: playerSize.height)
@@ -84,6 +110,8 @@ struct StreamView: View {
                     .buttonStyle(.plain)
                 }
             }
+            .simultaneousGesture(drag)
+            .zIndex(.infinity)
             .onChange(of: quality) { quality in
                 updatePlayer()
                 withAnimation {
@@ -95,19 +123,14 @@ struct StreamView: View {
                 HStack(spacing: 5) {
                     Circle().fill(.red).frame(width: 8, height: 8)
                 
-                    TextField("Channel", text: $channelName)
-                        .onSubmit {
-                            Task {
-                                await fetchData()
-                            }
-                        }
+                    Text(channelName)
+                    
+                    Spacer()
                     
                     Button {
-                        Task {
-                            await fetchData()
-                        }
+                        dismiss()
                     } label: {
-                        Image(systemName: "arrow.clockwise")
+                        Image(systemName: "x.circle")
                             .foregroundColor(.secondary)
                     }
                 }
@@ -155,6 +178,7 @@ struct StreamView: View {
             
             Spacer()
         }
+        .offset(dragOffset)
         .task {
             await fetchData()
         }
@@ -179,7 +203,7 @@ struct StreamView: View {
     }
     
     func fetchData() async {
-        guard let url = URL(string: "http://127.0.0.1:5000/\(channelName)") else {
+        guard let url = URL(string: "http://192.168.1.53:5000/\(channelName)") else {
             print("Invalid url")
             return
         }
