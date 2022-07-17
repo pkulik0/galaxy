@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		89810FEB288355D50010C9EC /* SwiftTwitchAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 89810FEA288355D50010C9EC /* SwiftTwitchAPI */; };
+		89810FEF288357420010C9EC /* TwitchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FEE288357420010C9EC /* TwitchManager.swift */; };
+		89810FF1288425350010C9EC /* FollowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF0288425350010C9EC /* FollowsView.swift */; };
+		89810FF428842ABD0010C9EC /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF328842ABD0010C9EC /* RootView.swift */; };
+		89810FF6288452B80010C9EC /* Numbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF5288452B80010C9EC /* Numbers.swift */; };
 		D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86844286A477C00EFAFCE /* galaxyApp.swift */; };
 		D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86846286A477C00EFAFCE /* StreamView.swift */; };
 		D6F86849286A477E00EFAFCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6F86848286A477E00EFAFCE /* Assets.xcassets */; };
@@ -16,6 +21,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		89810FE8288355120010C9EC /* SwiftTwitchAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwiftTwitchAPI; path = ../SwiftTwitchAPI; sourceTree = "<group>"; };
+		89810FEE288357420010C9EC /* TwitchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchManager.swift; sourceTree = "<group>"; };
+		89810FF0288425350010C9EC /* FollowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowsView.swift; sourceTree = "<group>"; };
+		89810FF328842ABD0010C9EC /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		89810FF5288452B80010C9EC /* Numbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Numbers.swift; sourceTree = "<group>"; };
 		D6F86841286A477C00EFAFCE /* galaxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = galaxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6F86844286A477C00EFAFCE /* galaxyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = galaxyApp.swift; sourceTree = "<group>"; };
 		D6F86846286A477C00EFAFCE /* StreamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamView.swift; sourceTree = "<group>"; };
@@ -30,19 +40,55 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89810FEB288355D50010C9EC /* SwiftTwitchAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		89810FE7288355120010C9EC /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				89810FE8288355120010C9EC /* SwiftTwitchAPI */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		89810FE9288355D50010C9EC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		89810FF22884253E0010C9EC /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D6F86846286A477C00EFAFCE /* StreamView.swift */,
+				89810FF0288425350010C9EC /* FollowsView.swift */,
+				89810FF328842ABD0010C9EC /* RootView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		89810FF7288452BD0010C9EC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				89810FF5288452B80010C9EC /* Numbers.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
 		D6F86838286A477C00EFAFCE = {
 			isa = PBXGroup;
 			children = (
+				89810FE7288355120010C9EC /* Packages */,
 				D6F86852286A809200EFAFCE /* README.md */,
 				D6F86854286A809800EFAFCE /* server */,
 				D6F86843286A477C00EFAFCE /* galaxy */,
 				D6F86842286A477C00EFAFCE /* Products */,
+				89810FE9288355D50010C9EC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -57,8 +103,10 @@
 		D6F86843286A477C00EFAFCE /* galaxy */ = {
 			isa = PBXGroup;
 			children = (
+				89810FF7288452BD0010C9EC /* Helpers */,
+				89810FF22884253E0010C9EC /* Views */,
 				D6F86844286A477C00EFAFCE /* galaxyApp.swift */,
-				D6F86846286A477C00EFAFCE /* StreamView.swift */,
+				89810FEE288357420010C9EC /* TwitchManager.swift */,
 				D6F86848286A477E00EFAFCE /* Assets.xcassets */,
 				D6F8684A286A477E00EFAFCE /* Preview Content */,
 			);
@@ -89,6 +137,9 @@
 			dependencies = (
 			);
 			name = galaxy;
+			packageProductDependencies = (
+				89810FEA288355D50010C9EC /* SwiftTwitchAPI */,
+			);
 			productName = galaxy;
 			productReference = D6F86841286A477C00EFAFCE /* galaxy.app */;
 			productType = "com.apple.product-type.application";
@@ -146,7 +197,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */,
+				89810FF1288425350010C9EC /* FollowsView.swift in Sources */,
+				89810FF6288452B80010C9EC /* Numbers.swift in Sources */,
 				D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */,
+				89810FEF288357420010C9EC /* TwitchManager.swift in Sources */,
+				89810FF428842ABD0010C9EC /* RootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +402,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		89810FEA288355D50010C9EC /* SwiftTwitchAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftTwitchAPI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D6F86839286A477C00EFAFCE /* Project object */;
 }
