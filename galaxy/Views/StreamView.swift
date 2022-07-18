@@ -25,12 +25,7 @@ struct StreamView: View {
     private var sortedStreamsKeys: [String] {
         func parseQuality(_ quality: String) -> Int {
             let index = quality.lastIndex(of: "p") ?? quality.endIndex
-            var qualityNumber = Int(quality[..<index]) ?? 0
-            
-            if index == quality.index(quality.endIndex, offsetBy: -2) {
-                qualityNumber += 1
-            }
-            return qualityNumber
+            return Int(quality[..<index]) ?? 0
         }
         
         return streams.keys.sorted { lhs, rhs in
@@ -119,22 +114,12 @@ struct StreamView: View {
                 }
             }
             
-            HStack {
-                HStack(spacing: 5) {
-                    Circle().fill(.red).frame(width: 8, height: 8)
+            HStack(spacing: 5) {
+                Circle().fill(.red).frame(width: 8, height: 8)
+                Text(channelName)
                 
-                    Text(channelName)
-                    
-                    Spacer()
-                    
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "x.circle")
-                            .foregroundColor(.secondary)
-                    }
-                }
-
+                Spacer()
+                
                 Menu {
                     Picker("Quality", selection: $quality) {
                         ForEach(sortedStreamsKeys, id: \.self) { quality in
