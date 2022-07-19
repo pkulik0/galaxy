@@ -15,10 +15,9 @@ struct StreamView: View {
     
     @State private var streams: [String:String] = [:]
     @State private var quality = ""
-    
-    @State private var chatMsg: [String] = ["chat"]
 
     @State private var showPlayer = true
+    @State private var lockChat = true
     
     @Environment(\.dismiss) private var dismiss
     
@@ -49,10 +48,9 @@ struct StreamView: View {
     
     @State private var dragOffset: CGSize = CGSize.zero
     
-    var drag: some Gesture {
+    var dragToClose: some Gesture {
         DragGesture()
             .onEnded { value in
-                print(value.translation)
                 if value.translation.height > 100 {
                     dismiss()
                 } else {
@@ -64,6 +62,15 @@ struct StreamView: View {
                     if value.translation.height > 0 {
                         dragOffset.height = value.translation.height
                     }
+                }
+            }
+    }
+    
+    var chatGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if value.translation.height > 0 {
+                    lockChat = false
                 }
             }
     }
@@ -105,7 +112,7 @@ struct StreamView: View {
                     .buttonStyle(.plain)
                 }
             }
-            .simultaneousGesture(drag)
+            .simultaneousGesture(dragToClose)
             .zIndex(.infinity)
             .onChange(of: quality) { quality in
                 updatePlayer()
@@ -141,30 +148,50 @@ struct StreamView: View {
             Divider()
             
             ScrollViewReader { reader in
-                ScrollView {
-                    VStack(spacing: 3) {
-                        ForEach(twitchManager.chatMessages, id: \.self.id) { message in
-                            HStack(alignment: .firstTextBaseline) {
-                                Text(message.userName)
-                                    .foregroundColor(Color.fromHexString(hex: message.color) ?? .blue)
-                                +
-                                Text(": ")
-                                +
-                                Text(message.text)
-                                    .foregroundColor(.primary)
-                                Spacer()
+                ZStack(alignment: .bottom) {
+                    ScrollView {
+                        VStack(spacing: 3) {
+                            ForEach(twitchManager.chatMessages, id: \.self.id) { message in
+                                HStack(alignment: .firstTextBaseline) {
+                                    Text(message.userName)
+                                        .foregroundColor(Color.fromHexString(hex: message.color) ?? .blue)
+                                    +
+                                    Text(": ")
+                                    +
+                                    Text(message.text)
+                                        .foregroundColor(.primary)
+                                    Spacer()
+                                }
+                                .font(.callout)
+                                .fixedSize(horizontal: false, vertical: true)
                             }
-                            .font(.callout)
-                            .fixedSize(horizontal: false, vertical: true)
+                            Color.clear.id("bottom")
                         }
-                        Color.clear.id("bottom")
+                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity)
                     }
-                    .padding(.horizontal)
-                    .frame(maxWidth: .infinity)
-                }
-                .onChange(of: twitchManager.chatMessages) { _ in
-                    withAnimation {
-                        reader.scrollTo("bottom")
+                    .simultaneousGesture(chatGesture)
+                    .onChange(of: twitchManager.chatMessages) { _ in
+                        if lockChat {
+                            withAnimation {
+                                reader.scrollTo("bottom")
+                            }
+                        }
+                    }
+                    
+                    if !lockChat {
+                        Button("Show latest messages.") {
+                            withAnimation {
+                                reader.scrollTo("bottom")
+                            }
+                            lockChat = true
+                        }
+                        .font(.subheadline)
+                        .padding(10)
+                        .background(.gray)
+                        .clipShape(RoundedRectangle(cornerRadius: 25))
+                        .padding(.bottom, 5)
+                        .buttonStyle(.plain)
                     }
                 }
             }
