@@ -20,7 +20,7 @@ struct RootView: View {
                 }
                 .tag("follows")
             
-            StreamView(channelName: "Lewus")
+            Text("aha")
                 .tabItem {
                     Image(systemName: "safari.fill")
                     Text("Discover")

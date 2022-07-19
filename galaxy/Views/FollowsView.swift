@@ -56,7 +56,7 @@ struct FollowsView: View {
             }
             .frame(maxWidth: .infinity)
             .fullScreenCover(item: $selectedStream) { stream in
-                StreamView(channelName: stream.userName)
+                StreamView(stream: stream)
             }
             .navigationBarTitle("Following")
         }

@@ -11,7 +11,7 @@ import SwiftTwitchAPI
 
 struct StreamView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
-    @State var channelName: String
+    @State var stream: SwiftTwitchAPI.StreamResponse
     
     @State private var streams: [String:String] = [:]
     @State private var quality = ""
@@ -116,7 +116,7 @@ struct StreamView: View {
             
             HStack(spacing: 5) {
                 Circle().fill(.red).frame(width: 8, height: 8)
-                Text(channelName)
+                Text(stream.userName)
                 
                 Spacer()
                 
@@ -143,21 +143,40 @@ struct StreamView: View {
             ScrollViewReader { reader in
                 ScrollView {
                     VStack(spacing: 3) {
-                        ForEach(chatMsg, id: \.self) { msg in
-                            HStack {
-                                Text(msg)
+                        ForEach(twitchManager.chatMessages, id: \.self.id) { message in
+                            HStack(alignment: .firstTextBaseline) {
+                                Text(message.userName)
+                                    .foregroundColor(Color.fromHexString(hex: message.color) ?? .blue)
+                                +
+                                Text(": ")
+                                +
+                                Text(message.text)
+                                    .foregroundColor(.primary)
                                 Spacer()
                             }
+                            .font(.callout)
+                            .fixedSize(horizontal: false, vertical: true)
                         }
                         Color.clear.id("bottom")
                     }
                     .padding(.horizontal)
                     .frame(maxWidth: .infinity)
                 }
-                .onChange(of: chatMsg) { _ in
+                .onChange(of: twitchManager.chatMessages) { _ in
                     withAnimation {
                         reader.scrollTo("bottom")
                     }
+                }
+            }
+            .onAppear {
+                if var irc = twitchManager.irc {
+                    twitchManager.ircMessages = []
+                    irc.joinChannel(channel: stream.userLogin)
+                }
+            }
+            .onDisappear {
+                if var irc = twitchManager.irc {
+                    irc.leaveChannel(channel: stream.userLogin)
                 }
             }
             
@@ -188,7 +207,7 @@ struct StreamView: View {
     }
     
     func fetchData() async {
-        guard let url = URL(string: "http://192.168.1.53:5000/\(channelName)") else {
+        guard let url = URL(string: "http://0.0.0.0:5000/\(stream.userName.lowercased())") else {
             print("Invalid url")
             return
         }
