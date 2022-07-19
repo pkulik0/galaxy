@@ -153,26 +153,7 @@ struct StreamView: View {
                     ScrollView {
                         VStack(spacing: 3) {
                             ForEach(twitchManager.chatMessages) { message in
-                                HStack(alignment: .firstTextBaseline, spacing: 5) {
-                                    ForEach(message.badges.sorted(by: >), id: \.key) { badge, level in
-                                        if let url = twitchManager.getChannelBadgeURL(badgeName: badge, channelID: stream.userID, level: level) {
-                                            CachedAsyncImage(url: url)
-                                        } else {
-                                            CachedAsyncImage(url: twitchManager.getGlobalBadgeURL(badgeName: badge))
-                                        }
-                                    }
-                                    
-                                    Text(message.userName)
-                                        .foregroundColor(Color.fromHexString(hex: message.color, nickname: message.userName))
-                                    +
-                                    Text(": ")
-                                    +
-                                    Text(message.text)
-                                        .foregroundColor(.primary)
-                                    Spacer()
-                                }
-                                .font(.callout)
-                                .fixedSize(horizontal: false, vertical: true)
+                                ChatMessageView(message: message, channelID: stream.userID)
                             }
                             Color.clear.id("bottom")
                         }
