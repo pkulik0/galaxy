@@ -7,11 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		89810FEB288355D50010C9EC /* SwiftTwitchAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 89810FEA288355D50010C9EC /* SwiftTwitchAPI */; };
 		89810FEF288357420010C9EC /* TwitchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FEE288357420010C9EC /* TwitchManager.swift */; };
 		89810FF1288425350010C9EC /* FollowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF0288425350010C9EC /* FollowsView.swift */; };
 		89810FF428842ABD0010C9EC /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF328842ABD0010C9EC /* RootView.swift */; };
 		89810FF6288452B80010C9EC /* Numbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF5288452B80010C9EC /* Numbers.swift */; };
+		89AB71182886123600B64BC7 /* SwiftTwitchAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB71172886123600B64BC7 /* SwiftTwitchAPI */; };
+		89AB711A2886123A00B64BC7 /* SwiftTwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB71192886123A00B64BC7 /* SwiftTwitchIRC */; };
+		89AB711C28870AAE00B64BC7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB711B28870AAE00B64BC7 /* Colors.swift */; };
 		D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86844286A477C00EFAFCE /* galaxyApp.swift */; };
 		D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86846286A477C00EFAFCE /* StreamView.swift */; };
 		D6F86849286A477E00EFAFCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6F86848286A477E00EFAFCE /* Assets.xcassets */; };
@@ -26,6 +28,8 @@
 		89810FF0288425350010C9EC /* FollowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowsView.swift; sourceTree = "<group>"; };
 		89810FF328842ABD0010C9EC /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		89810FF5288452B80010C9EC /* Numbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Numbers.swift; sourceTree = "<group>"; };
+		89AB71162886122900B64BC7 /* SwiftTwitchIRC */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwiftTwitchIRC; path = ../SwiftTwitchIRC; sourceTree = "<group>"; };
+		89AB711B28870AAE00B64BC7 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		D6F86841286A477C00EFAFCE /* galaxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = galaxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6F86844286A477C00EFAFCE /* galaxyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = galaxyApp.swift; sourceTree = "<group>"; };
 		D6F86846286A477C00EFAFCE /* StreamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamView.swift; sourceTree = "<group>"; };
@@ -40,7 +44,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89810FEB288355D50010C9EC /* SwiftTwitchAPI in Frameworks */,
+				89AB711A2886123A00B64BC7 /* SwiftTwitchIRC in Frameworks */,
+				89AB71182886123600B64BC7 /* SwiftTwitchAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				89810FE8288355120010C9EC /* SwiftTwitchAPI */,
+				89AB71162886122900B64BC7 /* SwiftTwitchIRC */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -76,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				89810FF5288452B80010C9EC /* Numbers.swift */,
+				89AB711B28870AAE00B64BC7 /* Colors.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -138,7 +145,8 @@
 			);
 			name = galaxy;
 			packageProductDependencies = (
-				89810FEA288355D50010C9EC /* SwiftTwitchAPI */,
+				89AB71172886123600B64BC7 /* SwiftTwitchAPI */,
+				89AB71192886123A00B64BC7 /* SwiftTwitchIRC */,
 			);
 			productName = galaxy;
 			productReference = D6F86841286A477C00EFAFCE /* galaxy.app */;
@@ -198,6 +206,7 @@
 			files = (
 				D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */,
 				89810FF1288425350010C9EC /* FollowsView.swift in Sources */,
+				89AB711C28870AAE00B64BC7 /* Colors.swift in Sources */,
 				89810FF6288452B80010C9EC /* Numbers.swift in Sources */,
 				D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */,
 				89810FEF288357420010C9EC /* TwitchManager.swift in Sources */,
@@ -404,9 +413,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		89810FEA288355D50010C9EC /* SwiftTwitchAPI */ = {
+		89AB71172886123600B64BC7 /* SwiftTwitchAPI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftTwitchAPI;
+		};
+		89AB71192886123A00B64BC7 /* SwiftTwitchIRC */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftTwitchIRC;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
