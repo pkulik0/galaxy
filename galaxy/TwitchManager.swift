@@ -24,6 +24,9 @@ class TwitchManager: ObservableObject {
     }
     let bufferSize = 200
     
+    @Published var globalBadges: [SwiftTwitchAPI.BadgeResponse] = []
+    @Published var channelBadges: [String: [SwiftTwitchAPI.BadgeResponse]] = [:]
+    
     init() {
         api.getUsers { result in
             switch(result) {
@@ -46,6 +49,8 @@ class TwitchManager: ObservableObject {
                 print("handle me")
             }
         }
+        
+        getGlobalBadges()
     }
     
     func getImageURL(urlString: String, width: Int, height: Int) -> URL? {
@@ -71,5 +76,63 @@ class TwitchManager: ObservableObject {
                 print("handle me")
             }
         }
+    }
+    
+    func getGlobalBadges() {
+        api.getGlobalBadges { result in
+            switch(result) {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.globalBadges = response.data
+                }
+                break
+            case .failure(_):
+                print("handle me")
+            }
+        }
+    }
+    
+    func getChannelBadges(channelID: String) {
+        if channelBadges.keys.contains(channelID) {
+            return
+        }
+        
+        api.getChannelBadges(broadcasterID: channelID) { result in
+            switch(result) {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.channelBadges[channelID] = response.data
+                }
+                break
+            case .failure(_):
+                print("handle me")
+            }
+        }
+    }
+    
+    func getGlobalBadgeURL(badgeName: String) -> URL? {
+        let urlString = globalBadges.first(where: { $0.setID == badgeName })?.versions.first?.imageURL1X
+
+        guard let urlString = urlString else {
+            return nil
+        }
+
+        return URL(string: urlString)
+    }
+    
+    func getChannelBadgeURL(badgeName: String, channelID: String, level: Int) -> URL? {
+        let badge = channelBadges[channelID]?.first(where: { $0.setID == badgeName })
+        
+        guard let badge = badge else {
+            return nil
+        }
+        
+        let urlString = badge.versions.first(where: { $0.id == String(level) })?.imageURL1X
+
+        guard let urlString = urlString else {
+            return nil
+        }
+        
+        return URL(string: urlString)
     }
 }

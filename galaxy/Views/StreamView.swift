@@ -8,6 +8,7 @@
 import SwiftUI
 import AVKit
 import SwiftTwitchAPI
+import CachedAsyncImage
 
 struct StreamView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
@@ -151,10 +152,18 @@ struct StreamView: View {
                 ZStack(alignment: .bottom) {
                     ScrollView {
                         VStack(spacing: 3) {
-                            ForEach(twitchManager.chatMessages, id: \.self.id) { message in
-                                HStack(alignment: .firstTextBaseline) {
+                            ForEach(twitchManager.chatMessages) { message in
+                                HStack(alignment: .firstTextBaseline, spacing: 5) {
+                                    ForEach(message.badges.sorted(by: >), id: \.key) { badge, level in
+                                        if let url = twitchManager.getChannelBadgeURL(badgeName: badge, channelID: stream.userID, level: level) {
+                                            CachedAsyncImage(url: url)
+                                        } else {
+                                            CachedAsyncImage(url: twitchManager.getGlobalBadgeURL(badgeName: badge))
+                                        }
+                                    }
+                                    
                                     Text(message.userName)
-                                        .foregroundColor(Color.fromHexString(hex: message.color) ?? .blue)
+                                        .foregroundColor(Color.fromHexString(hex: message.color, nickname: message.userName))
                                     +
                                     Text(": ")
                                     +
@@ -200,6 +209,7 @@ struct StreamView: View {
                     twitchManager.ircMessages = []
                     irc.joinChannel(channel: stream.userLogin)
                 }
+                twitchManager.getChannelBadges(channelID: stream.userID)
             }
             .onDisappear {
                 if var irc = twitchManager.irc {

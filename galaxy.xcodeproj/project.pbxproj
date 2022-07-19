@@ -14,6 +14,7 @@
 		89AB71182886123600B64BC7 /* SwiftTwitchAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB71172886123600B64BC7 /* SwiftTwitchAPI */; };
 		89AB711A2886123A00B64BC7 /* SwiftTwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB71192886123A00B64BC7 /* SwiftTwitchIRC */; };
 		89AB711C28870AAE00B64BC7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB711B28870AAE00B64BC7 /* Colors.swift */; };
+		89AB711F2887267C00B64BC7 /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB711E2887267C00B64BC7 /* CachedAsyncImage */; };
 		D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86844286A477C00EFAFCE /* galaxyApp.swift */; };
 		D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86846286A477C00EFAFCE /* StreamView.swift */; };
 		D6F86849286A477E00EFAFCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6F86848286A477E00EFAFCE /* Assets.xcassets */; };
@@ -44,6 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89AB711F2887267C00B64BC7 /* CachedAsyncImage in Frameworks */,
 				89AB711A2886123A00B64BC7 /* SwiftTwitchIRC in Frameworks */,
 				89AB71182886123600B64BC7 /* SwiftTwitchAPI in Frameworks */,
 			);
@@ -147,6 +149,7 @@
 			packageProductDependencies = (
 				89AB71172886123600B64BC7 /* SwiftTwitchAPI */,
 				89AB71192886123A00B64BC7 /* SwiftTwitchIRC */,
+				89AB711E2887267C00B64BC7 /* CachedAsyncImage */,
 			);
 			productName = galaxy;
 			productReference = D6F86841286A477C00EFAFCE /* galaxy.app */;
@@ -176,6 +179,9 @@
 				Base,
 			);
 			mainGroup = D6F86838286A477C00EFAFCE;
+			packageReferences = (
+				89AB711D2887267C00B64BC7 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+			);
 			productRefGroup = D6F86842286A477C00EFAFCE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -412,6 +418,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		89AB711D2887267C00B64BC7 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		89AB71172886123600B64BC7 /* SwiftTwitchAPI */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -420,6 +437,11 @@
 		89AB71192886123A00B64BC7 /* SwiftTwitchIRC */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftTwitchIRC;
+		};
+		89AB711E2887267C00B64BC7 /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89AB711D2887267C00B64BC7 /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
