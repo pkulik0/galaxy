@@ -110,7 +110,7 @@ class TwitchManager: ObservableObject {
         }
     }
     
-    func getGlobalBadgeURL(badgeName: String) -> URL? {
+    private func getGlobalBadgeURL(badgeName: String) -> URL? {
         let urlString = globalBadges.first(where: { $0.setID == badgeName })?.versions.first?.imageURL1X
 
         guard let urlString = urlString else {
@@ -120,7 +120,7 @@ class TwitchManager: ObservableObject {
         return URL(string: urlString)
     }
     
-    func getChannelBadgeURL(badgeName: String, channelID: String, level: Int) -> URL? {
+    private func getChannelBadgeURL(badgeName: String, channelID: String, level: Int) -> URL? {
         let badge = channelBadges[channelID]?.first(where: { $0.setID == badgeName })
         
         guard let badge = badge else {
@@ -134,5 +134,12 @@ class TwitchManager: ObservableObject {
         }
         
         return URL(string: urlString)
+    }
+    
+    func getBadgeURL(badgeName: String, channelID: String, level: Int) -> URL? {
+        if let url = getChannelBadgeURL(badgeName: badgeName, channelID: channelID, level: level) {
+            return url
+        }
+        return getGlobalBadgeURL(badgeName: badgeName)
     }
 }
