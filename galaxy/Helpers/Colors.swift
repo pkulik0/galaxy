@@ -18,9 +18,11 @@ extension Color {
         )
     }
     
-    static func fromHexString(hex: String, opacity: Double = 1) -> Color? {
+    static let fallbackColors: [Color] = [.yellow, .blue, .orange, .green, .red, .cyan, .brown, .indigo, .pink, .mint]
+    
+    static func fromHexString(hex: String, nickname: String, opacity: Double = 1) -> Color {
         guard let hex = Int(hex.trimmingCharacters(in: .alphanumerics.inverted), radix: 16) else {
-            return nil
+            return fallbackColors[nickname.count % fallbackColors.count]
         }
         return Color(hex: hex, opacity: opacity)
     }
