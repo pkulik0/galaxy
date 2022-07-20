@@ -19,7 +19,15 @@ struct FollowsView: View {
                     ForEach(twitchManager.followedStreams) { stream in
                         HStack {
                             ZStack(alignment: .bottomLeading) {
-                                AsyncImage(url: twitchManager.getImageURL(urlString: stream.thumbnailURL, width: 150, height: 85))
+                                AsyncImage(url: twitchManager.getImageURL(urlString: stream.thumbnailURL, width: 150, height: 85)) { phase in
+                                    if let image = phase.image {
+                                        image
+                                    } else if phase.error != nil {
+                                        Image(systemName: "exclamationmark.questionmark")
+                                    } else {
+                                        ProgressView()
+                                    }
+                                }
                                     .frame(width: 150, height: 85)
                                 
                                 HStack(spacing: 5) {
@@ -39,7 +47,7 @@ struct FollowsView: View {
                                     .foregroundColor(.primary)
                                 Text(stream.title)
                                     .font(.subheadline)
-                                    .lineLimit(1)
+                                    .lineLimit(2)
                                     .foregroundColor(.secondary)
                                 Text(stream.gameName)
                                     .font(.caption)
