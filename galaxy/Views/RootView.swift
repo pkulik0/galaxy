@@ -20,7 +20,7 @@ struct RootView: View {
                 }
                 .tag("follows")
             
-            Text("aha")
+            DiscoverView()
                 .tabItem {
                     Image(systemName: "safari.fill")
                     Text("Discover")
