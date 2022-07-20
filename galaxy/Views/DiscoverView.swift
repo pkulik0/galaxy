@@ -12,15 +12,7 @@ struct DiscoverView: View {
     @State private var imageSource: UIImage?
     
     var body: some View {
-        VStack {
-            if let imageSource = imageSource {
-                Image(uiImage: imageSource)
-            }
-            Text("heh")
-                .task {
-                    imageSource = await twitchManager.downloadImage(from: twitchManager.getBadgeURL(badgeName: "subscriber", channelID: "", level: 1)!)
-                }
-        }
+        Text("aha")
     }
 }
 

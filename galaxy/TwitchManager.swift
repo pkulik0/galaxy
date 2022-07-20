@@ -5,7 +5,7 @@
 //  Created by pkulik0 on 16/07/2022.
 //
 
-import Combine
+import SwiftUI
 import SwiftTwitchAPI
 import SwiftTwitchIRC
 import Dispatch
@@ -203,36 +203,4 @@ class TwitchManager: ObservableObject {
         }
         return getGlobalBadgeURL(badgeName: badgeName)
     }
-    
-    func downloadImage(from url: URL) async -> UIImage? {
-        do {
-            let (data, response) = try await URLSession.shared.data(from: url)
-            
-            guard let mimeType = response.mimeType, mimeType.hasPrefix("image") else {
-                return nil
-            }
-
-            return UIImage(data: data)
-        } catch {
-            print(error.localizedDescription)
-            return nil
-        }
-    }
-    
-    func parseMessageContent(messageText: String, channelID: String = "") -> [MessageContent] {
-        let messageTokens = messageText.split(separator: " ").map({ String($0) })
-        var messageContent: [MessageContent] = []
-        
-        for token in messageTokens {
-            messageContent.append(MessageContent(text: token, url: getEmoteURL(emoteName: token, channelID: channelID), uiImage: nil))
-        }
-        
-        return messageContent
-    }
-}
-
-struct MessageContent {
-    let text: String
-    let url: URL?
-    var uiImage: UIImage?
 }

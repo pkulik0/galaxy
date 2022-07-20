@@ -151,7 +151,7 @@ struct StreamView: View {
             ScrollViewReader { reader in
                 ZStack(alignment: .bottom) {
                     ScrollView {
-                        VStack(spacing: 3) {
+                        LazyVStack(spacing: 3) {
                             ForEach(twitchManager.chatMessages) { message in
                                 ChatMessageView(message: message, channelID: stream.userID)
                             }
