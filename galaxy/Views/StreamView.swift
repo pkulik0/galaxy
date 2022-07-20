@@ -191,6 +191,7 @@ struct StreamView: View {
                     irc.joinChannel(channel: stream.userLogin)
                 }
                 twitchManager.getChannelBadges(channelID: stream.userID)
+                twitchManager.getChannelEmotes(channelID: stream.userID)
             }
             .onDisappear {
                 if var irc = twitchManager.irc {

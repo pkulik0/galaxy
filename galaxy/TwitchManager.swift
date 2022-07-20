@@ -10,6 +10,7 @@ import SwiftTwitchAPI
 import SwiftTwitchIRC
 import Dispatch
 import Foundation
+import UIKit
 
 class TwitchManager: ObservableObject {
     let api = SwiftTwitchAPI(clientID: "thffseh4mtlmaqnd89rm17ugso8s30", authToken: "3184l994nsn2lgpq8gaup3oe3xifty")
@@ -26,6 +27,10 @@ class TwitchManager: ObservableObject {
     
     @Published var globalBadges: [SwiftTwitchAPI.BadgeResponse] = []
     @Published var channelBadges: [String: [SwiftTwitchAPI.BadgeResponse]] = [:]
+    
+    @Published var globalEmotes: [SwiftTwitchAPI.EmoteResponse] = []
+    @Published var channelEmotes: [String: [SwiftTwitchAPI.EmoteResponse]] = [:]
+
     
     init() {
         api.getUsers { result in
@@ -51,6 +56,7 @@ class TwitchManager: ObservableObject {
         }
         
         getGlobalBadges()
+        getGlobalEmotes()
     }
     
     func getImageURL(urlString: String, width: Int, height: Int) -> URL? {
@@ -110,6 +116,66 @@ class TwitchManager: ObservableObject {
         }
     }
     
+    func getGlobalEmotes() {
+        api.getGlobalEmotes { result in
+            switch(result) {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.globalEmotes = response.data
+                }
+                break
+            case .failure(_):
+                print("handle me")
+            }
+        }
+    }
+    
+    func getChannelEmotes(channelID: String) {
+        if channelEmotes.keys.contains(channelID) {
+            return
+        }
+        
+        api.getChannelEmotes(broadcasterID: channelID) { result in
+            switch(result) {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.channelEmotes[channelID] = response.data
+                    print(response.data)
+                }
+                break
+            case .failure(_):
+                print("handle me")
+            }
+        }
+    }
+    
+    private func getGlobalEmoteURL(emoteName: String) -> URL? {
+        let urlString = globalEmotes.first(where: { $0.name == emoteName })?.images.url1X
+        
+        guard let urlString = urlString else {
+            return nil
+        }
+        
+        return URL(string: urlString)
+    }
+    
+    private func getChannelEmoteURL(emoteName: String, channelID: String) -> URL? {
+        let urlString = channelEmotes[channelID]?.first(where: { $0.name == emoteName })?.images.url1X
+        
+        guard let urlString = urlString else {
+            return nil
+        }
+        
+        return URL(string: urlString)
+    }
+    
+    func getEmoteURL(emoteName: String, channelID: String) -> URL? {
+        if let url = getChannelEmoteURL(emoteName: emoteName, channelID: channelID) {
+            return url
+        }
+        return getGlobalEmoteURL(emoteName: emoteName)
+    }
+    
     private func getGlobalBadgeURL(badgeName: String) -> URL? {
         let urlString = globalBadges.first(where: { $0.setID == badgeName })?.versions.first?.imageURL1X
 
@@ -122,12 +188,7 @@ class TwitchManager: ObservableObject {
     
     private func getChannelBadgeURL(badgeName: String, channelID: String, level: Int) -> URL? {
         let badge = channelBadges[channelID]?.first(where: { $0.setID == badgeName })
-        
-        guard let badge = badge else {
-            return nil
-        }
-        
-        let urlString = badge.versions.first(where: { $0.id == String(level) })?.imageURL1X
+        let urlString = badge?.versions.first(where: { $0.id == String(level) })?.imageURL1X
 
         guard let urlString = urlString else {
             return nil
@@ -136,10 +197,42 @@ class TwitchManager: ObservableObject {
         return URL(string: urlString)
     }
     
-    func getBadgeURL(badgeName: String, channelID: String, level: Int) -> URL? {
+    func getBadgeURL(badgeName: String, channelID: String = "", level: Int) -> URL? {
         if let url = getChannelBadgeURL(badgeName: badgeName, channelID: channelID, level: level) {
             return url
         }
         return getGlobalBadgeURL(badgeName: badgeName)
     }
+    
+    func downloadImage(from url: URL) async -> UIImage? {
+        do {
+            let (data, response) = try await URLSession.shared.data(from: url)
+            
+            guard let mimeType = response.mimeType, mimeType.hasPrefix("image") else {
+                return nil
+            }
+
+            return UIImage(data: data)
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+    }
+    
+    func parseMessageContent(messageText: String, channelID: String = "") -> [MessageContent] {
+        let messageTokens = messageText.split(separator: " ").map({ String($0) })
+        var messageContent: [MessageContent] = []
+        
+        for token in messageTokens {
+            messageContent.append(MessageContent(text: token, url: getEmoteURL(emoteName: token, channelID: channelID), uiImage: nil))
+        }
+        
+        return messageContent
+    }
+}
+
+struct MessageContent {
+    let text: String
+    let url: URL?
+    var uiImage: UIImage?
 }
