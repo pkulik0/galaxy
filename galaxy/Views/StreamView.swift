@@ -20,6 +20,8 @@ struct StreamView: View {
     @State private var showPlayer = true
     @State private var lockChat = true
     
+    @State private var messageText = ""
+    
     @Environment(\.dismiss) private var dismiss
     
     private var sortedStreamsKeys: [String] {
@@ -200,6 +202,23 @@ struct StreamView: View {
             }
             
             Spacer()
+            
+            Divider()
+            
+            HStack {
+                TextField("Say something...", text: $messageText)
+                Button {
+                    if let irc = twitchManager.irc {
+                        irc.sendMessage(message: messageText, channel: stream.userLogin)
+                    }
+                    messageText = ""
+                } label: {
+                    Image(systemName: "paperplane.fill")
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.horizontal)
+            .padding(.top, 5)
         }
         .offset(dragOffset)
         .task {
