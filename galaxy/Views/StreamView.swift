@@ -238,7 +238,6 @@ struct StreamView: View {
                 decodedData.removeValue(forKey: "worst")
                 decodedData.removeValue(forKey: "best")
                 streams = decodedData
-                quality = "none"
                 quality = sortedStreamsKeys.first ?? ""
             }
         } catch {
