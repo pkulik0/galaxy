@@ -10,7 +10,7 @@ import SwiftTwitchIRC
 import WrappingHStack
 
 struct MessageContent {
-    let text: String
+    var text: String
     var color: Color?
     var url: URL?
     var uiImage: UIImage?
@@ -25,9 +25,9 @@ struct ChatMessageView: View {
     
     func parseMessage() {
         parsedMessages = []
-        for (badge, level) in message.badges {
+        for (badge, level) in message.badges.sorted(by: <) {
             let badgeURL = twitchManager.getBadgeURL(badgeName: badge, channelID: channelID, level: level)
-            let parsed = MessageContent(text: badge, url: badgeURL)
+            let parsed = MessageContent(text: ".", url: badgeURL)
             parsedMessages.append(parsed)
         }
         
@@ -39,7 +39,10 @@ struct ChatMessageView: View {
             let word = String(word)
             
             let url = twitchManager.getEmoteURL(emoteName: word, channelID: channelID)
-            let parsed = MessageContent(text: "\(word) ", url: url)
+            var parsed = MessageContent(text: "\(word) ", url: url)
+            if let _ = url {
+                parsed.text = ". "
+            }
             parsedMessages.append(parsed)
         }
     }
@@ -61,7 +64,8 @@ struct ChatMessageView: View {
                 }
             }
         }
-        .font(.callout)
+        .fixedSize(horizontal: false, vertical: true)
+        .font(.body)
         .onAppear {
             parseMessage()
         }

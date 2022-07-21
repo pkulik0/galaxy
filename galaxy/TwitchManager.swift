@@ -176,8 +176,9 @@ class TwitchManager: ObservableObject {
         return getGlobalEmoteURL(emoteName: emoteName)
     }
     
-    private func getGlobalBadgeURL(badgeName: String) -> URL? {
-        let urlString = globalBadges.first(where: { $0.setID == badgeName })?.versions.first?.imageURL1X
+    private func getGlobalBadgeURL(badgeName: String, level: Int) -> URL? {
+        let badge = globalBadges.first(where: { $0.setID == badgeName })
+        let urlString = badge?.versions.first(where: { $0.id == String(level) })?.imageURL1X
 
         guard let urlString = urlString else {
             return nil
@@ -201,6 +202,6 @@ class TwitchManager: ObservableObject {
         if let url = getChannelBadgeURL(badgeName: badgeName, channelID: channelID, level: level) {
             return url
         }
-        return getGlobalBadgeURL(badgeName: badgeName)
+        return getGlobalBadgeURL(badgeName: badgeName, level: level)
     }
 }
