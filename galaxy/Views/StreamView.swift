@@ -8,7 +8,6 @@
 import SwiftUI
 import AVKit
 import SwiftTwitchAPI
-import CachedAsyncImage
 
 struct StreamView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
