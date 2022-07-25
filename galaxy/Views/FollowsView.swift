@@ -23,7 +23,7 @@ struct FollowsView: View {
                                     if let image = phase.image {
                                         image
                                     } else if phase.error != nil {
-                                        Image(systemName: "exclamationmark.questionmark")
+                                        Image(systemName: "exclamationmark")
                                     } else {
                                         ProgressView()
                                     }
