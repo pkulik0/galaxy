@@ -1,5 +1,5 @@
 //
-//  Numbers.swift
+//  Int.swift
 //  galaxy
 //
 //  Created by pkulik0 on 17/07/2022.

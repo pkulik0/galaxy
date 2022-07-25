@@ -1,5 +1,5 @@
 //
-//  Colors.swift
+//  Color.swift
 //  galaxy
 //
 //  Created by pkulik0 on 19/07/2022.

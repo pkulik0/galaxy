@@ -100,10 +100,12 @@ class TwitchManager: ObservableObject {
             for version in badge.versions {
                 Task {
                     var parsedBadge = Badge(name: badge.setID, level: version.id)
-                    guard let url = URL(string: version.imageURL1X) else {
+                    guard let url = URL(string: version.imageURL1X),
+                          let data = await Data.download(from: url)
+                    else {
                         return
                     }
-                    parsedBadge.image = await UIImage.download(from: url)
+                    parsedBadge.image = UIImage(data: data)
                     
                     if let channelID = channelID {
                         self.channelBadges[channelID]!.append(parsedBadge)
@@ -146,10 +148,13 @@ class TwitchManager: ObservableObject {
         for emote in emotes {
             Task {
                 var parsedEmote = Emote(name: emote.name)
-                guard let url = URL(string: emote.images.url1X) else {
+                guard let url = URL(string: emote.images.url1X),
+                      let data = await Data.download(from: url)
+                else {
                     return
                 }
-                parsedEmote.image = await UIImage.download(from: url)
+
+                parsedEmote.image = UIImage(data: data)
                 if let channelID = channelID {
                     self.channelEmotes[channelID]!.append(parsedEmote)
                 } else {
