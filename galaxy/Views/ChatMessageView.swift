@@ -42,7 +42,7 @@ struct ChatMessageView: View {
             let word = String(word)
             
             let emote = twitchManager.getEmote(name: word, channelID: channelID)
-            let parsed = MessageContent(text: word, uiImage: emote?.image)
+            let parsed = MessageContent(text: "\(word) ", uiImage: emote?.image)
             parsedMessages.append(parsed)
         }
     }

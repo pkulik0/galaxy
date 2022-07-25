@@ -153,7 +153,7 @@ struct StreamView: View {
                 ZStack(alignment: .bottom) {
                     ScrollView {
                         LazyVStack(spacing: 3) {
-                            ForEach(twitchManager.chatMessages) { message in
+                            ForEach(twitchManager.ircMessages) { message in
                                 ChatMessageView(message: message, channelID: stream.userID)
                             }
                             Color.clear.id("bottom")
@@ -162,7 +162,7 @@ struct StreamView: View {
                         .frame(maxWidth: .infinity)
                     }
                     .simultaneousGesture(chatGesture)
-                    .onChange(of: twitchManager.chatMessages) { _ in
+                    .onChange(of: twitchManager.ircMessages) { _ in
                         if lockChat {
                             withAnimation {
                                 reader.scrollTo("bottom")
@@ -187,16 +187,16 @@ struct StreamView: View {
                 }
             }
             .onAppear {
-                if var irc = twitchManager.irc {
+                if let irc = twitchManager.irc {
                     twitchManager.ircMessages = []
-                    irc.joinChannel(channel: stream.userLogin)
+                    irc.joinChatroom(stream.userLogin)
                 }
                 twitchManager.fetchChannelBadges(channelID: stream.userID)
                 twitchManager.fetchChannelEmotes(channelID: stream.userID)
             }
             .onDisappear {
-                if var irc = twitchManager.irc {
-                    irc.leaveChannel(channel: stream.userLogin)
+                if let irc = twitchManager.irc {
+                    irc.leaveChatroom(stream.userLogin)
                 }
             }
             
@@ -244,17 +244,17 @@ struct StreamView: View {
     }
     
     func fetchData() async {
-        guard let url = URL(string: "http://0.0.0.0:5000/\(stream.userName.lowercased())") else {
+        guard let url = URL(string: "http://0.0.0.0:5000/\(stream.userLogin.lowercased())") else {
             print("Invalid url")
             return
         }
-
+        
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            
             if var decodedData = try? JSONDecoder().decode([String:String].self, from: data) {
                 decodedData.removeValue(forKey: "worst")
                 decodedData.removeValue(forKey: "best")
+                
                 streams = decodedData
                 quality = sortedStreamsKeys.first ?? ""
             }

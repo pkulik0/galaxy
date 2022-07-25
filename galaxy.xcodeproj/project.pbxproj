@@ -11,13 +11,13 @@
 		89810FF1288425350010C9EC /* FollowsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF0288425350010C9EC /* FollowsView.swift */; };
 		89810FF428842ABD0010C9EC /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF328842ABD0010C9EC /* RootView.swift */; };
 		89810FF6288452B80010C9EC /* Numbers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89810FF5288452B80010C9EC /* Numbers.swift */; };
-		89AB71182886123600B64BC7 /* SwiftTwitchAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB71172886123600B64BC7 /* SwiftTwitchAPI */; };
-		89AB711A2886123A00B64BC7 /* SwiftTwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB71192886123A00B64BC7 /* SwiftTwitchIRC */; };
 		89AB711C28870AAE00B64BC7 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB711B28870AAE00B64BC7 /* Colors.swift */; };
 		89AB71212887403700B64BC7 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB71202887403700B64BC7 /* ChatMessageView.swift */; };
 		89AB71232888145B00B64BC7 /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB71222888145B00B64BC7 /* DiscoverView.swift */; };
 		89AB712928884FD300B64BC7 /* WrappingHStack in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB712828884FD300B64BC7 /* WrappingHStack */; };
 		89AB712B2888609900B64BC7 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB712A2888609900B64BC7 /* Images.swift */; };
+		89FAAE44288EF33000AAD630 /* SwiftTwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = 89FAAE43288EF33000AAD630 /* SwiftTwitchIRC */; };
+		89FAAE49288EF59E00AAD630 /* SwiftTwitchAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 89FAAE48288EF59E00AAD630 /* SwiftTwitchAPI */; };
 		D6F86845286A477C00EFAFCE /* galaxyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86844286A477C00EFAFCE /* galaxyApp.swift */; };
 		D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F86846286A477C00EFAFCE /* StreamView.swift */; };
 		D6F86849286A477E00EFAFCE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6F86848286A477E00EFAFCE /* Assets.xcassets */; };
@@ -27,12 +27,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		89810FE8288355120010C9EC /* SwiftTwitchAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwiftTwitchAPI; path = ../SwiftTwitchAPI; sourceTree = "<group>"; };
 		89810FEE288357420010C9EC /* TwitchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitchManager.swift; sourceTree = "<group>"; };
 		89810FF0288425350010C9EC /* FollowsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowsView.swift; sourceTree = "<group>"; };
 		89810FF328842ABD0010C9EC /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		89810FF5288452B80010C9EC /* Numbers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Numbers.swift; sourceTree = "<group>"; };
-		89AB71162886122900B64BC7 /* SwiftTwitchIRC */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwiftTwitchIRC; path = ../SwiftTwitchIRC; sourceTree = "<group>"; };
 		89AB711B28870AAE00B64BC7 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		89AB71202887403700B64BC7 /* ChatMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
 		89AB71222888145B00B64BC7 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
@@ -51,24 +49,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				89AB711A2886123A00B64BC7 /* SwiftTwitchIRC in Frameworks */,
 				89AB712928884FD300B64BC7 /* WrappingHStack in Frameworks */,
-				89AB71182886123600B64BC7 /* SwiftTwitchAPI in Frameworks */,
+				89FAAE44288EF33000AAD630 /* SwiftTwitchIRC in Frameworks */,
+				89FAAE49288EF59E00AAD630 /* SwiftTwitchAPI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		89810FE7288355120010C9EC /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				89810FE8288355120010C9EC /* SwiftTwitchAPI */,
-				89AB71162886122900B64BC7 /* SwiftTwitchIRC */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		89810FE9288355D50010C9EC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,7 +90,6 @@
 		D6F86838286A477C00EFAFCE = {
 			isa = PBXGroup;
 			children = (
-				89810FE7288355120010C9EC /* Packages */,
 				D6F86852286A809200EFAFCE /* README.md */,
 				D6F86854286A809800EFAFCE /* server */,
 				D6F86843286A477C00EFAFCE /* galaxy */,
@@ -156,9 +144,9 @@
 			);
 			name = galaxy;
 			packageProductDependencies = (
-				89AB71172886123600B64BC7 /* SwiftTwitchAPI */,
-				89AB71192886123A00B64BC7 /* SwiftTwitchIRC */,
 				89AB712828884FD300B64BC7 /* WrappingHStack */,
+				89FAAE43288EF33000AAD630 /* SwiftTwitchIRC */,
+				89FAAE48288EF59E00AAD630 /* SwiftTwitchAPI */,
 			);
 			productName = galaxy;
 			productReference = D6F86841286A477C00EFAFCE /* galaxy.app */;
@@ -190,6 +178,8 @@
 			mainGroup = D6F86838286A477C00EFAFCE;
 			packageReferences = (
 				89AB712728884FD300B64BC7 /* XCRemoteSwiftPackageReference "WrappingHStack" */,
+				89FAAE40288EF30400AAD630 /* XCRemoteSwiftPackageReference "SwiftTwitchIRC" */,
+				89FAAE45288EF58E00AAD630 /* XCRemoteSwiftPackageReference "SwiftTwitchAPI" */,
 			);
 			productRefGroup = D6F86842286A477C00EFAFCE /* Products */;
 			projectDirPath = "";
@@ -439,21 +429,39 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		89FAAE40288EF30400AAD630 /* XCRemoteSwiftPackageReference "SwiftTwitchIRC" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pkulik0/SwiftTwitchIRC";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		89FAAE45288EF58E00AAD630 /* XCRemoteSwiftPackageReference "SwiftTwitchAPI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pkulik0/SwiftTwitchAPI";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		89AB71172886123600B64BC7 /* SwiftTwitchAPI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftTwitchAPI;
-		};
-		89AB71192886123A00B64BC7 /* SwiftTwitchIRC */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = SwiftTwitchIRC;
-		};
 		89AB712828884FD300B64BC7 /* WrappingHStack */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 89AB712728884FD300B64BC7 /* XCRemoteSwiftPackageReference "WrappingHStack" */;
 			productName = WrappingHStack;
+		};
+		89FAAE43288EF33000AAD630 /* SwiftTwitchIRC */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89FAAE40288EF30400AAD630 /* XCRemoteSwiftPackageReference "SwiftTwitchIRC" */;
+			productName = SwiftTwitchIRC;
+		};
+		89FAAE48288EF59E00AAD630 /* SwiftTwitchAPI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89FAAE45288EF58E00AAD630 /* XCRemoteSwiftPackageReference "SwiftTwitchAPI" */;
+			productName = SwiftTwitchAPI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

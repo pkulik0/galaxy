@@ -20,9 +20,6 @@ class TwitchManager: ObservableObject {
     @Published var followedStreams: [SwiftTwitchAPI.StreamResponse] = []
     
     @Published var ircMessages: [SwiftTwitchIRC.ChatMessage] = []
-    var chatMessages: [SwiftTwitchIRC.ChatMessage] {
-        return ircMessages.filter({ $0.command == "PRIVMSG" })
-    }
     let bufferSize = 200
     
     struct Badge {
@@ -47,19 +44,13 @@ class TwitchManager: ObservableObject {
         api.getUsers { result in
             switch(result) {
             case .success(let response):
-                DispatchQueue.main.async {
-                    let user = response.data[0]
-                    self.user = user
+                DispatchQueue.main.async { [self] in
+                    let userResponse = response.data[0]
+                    user = userResponse
                     
-                    self.getFollowedStreams()
-                    self.irc = SwiftTwitchIRC(username: user.login, token: "3184l994nsn2lgpq8gaup3oe3xifty", onMessageReceived: { message in
-                        DispatchQueue.main.async {
-                            self.ircMessages.append(message)
-                            if self.ircMessages.count > self.bufferSize {
-                                self.ircMessages.remove(at: 0)
-                            }
-                        }
-                    })
+                    getFollowedStreams()
+                    let urlSession = URLSession(configuration: .default)
+                    irc = SwiftTwitchIRC(username: userResponse.login, token: "3184l994nsn2lgpq8gaup3oe3xifty", session: urlSession, onMessageReceived: receiveChatMessage, onWhisperReceived: nil, onNoticeReceived: nil, onUserNoticeReceived: nil, onUserStateChanged: nil, onRoomStateChanged: nil, onClearChat: nil, onClearMessage: nil)
                 }
             case .failure(_):
                 print("handle me")
@@ -68,6 +59,15 @@ class TwitchManager: ObservableObject {
         
         fetchGlobalBadges()
         fetchGlobalEmotes()
+    }
+    
+    func receiveChatMessage(msg: SwiftTwitchIRC.ChatMessage) {
+        DispatchQueue.main.async { [self] in
+            ircMessages.append(msg)
+            if ircMessages.count > bufferSize {
+                ircMessages.remove(at: 0)
+            }
+        }
     }
     
     func getImageURL(urlString: String, width: Int, height: Int) -> URL? {
