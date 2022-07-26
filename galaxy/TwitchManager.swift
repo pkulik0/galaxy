@@ -16,8 +16,8 @@ class TwitchManager: ObservableObject {
     let api = SwiftTwitchAPI(clientID: "thffseh4mtlmaqnd89rm17ugso8s30", authToken: "3184l994nsn2lgpq8gaup3oe3xifty")
     var irc: SwiftTwitchIRC? = nil
     
-    @Published var user: SwiftTwitchAPI.UserResponse?
-    @Published var followedStreams: [SwiftTwitchAPI.StreamResponse] = []
+    @Published var user: SwiftTwitchAPI.User?
+    @Published var followedStreams: [SwiftTwitchAPI.Stream] = []
     
     @Published var ircMessages: [SwiftTwitchIRC.ChatMessage] = []
     let bufferSize = 200
@@ -95,7 +95,7 @@ class TwitchManager: ObservableObject {
         }
     }
     
-    private func parseBadges(badges: [SwiftTwitchAPI.BadgeResponse], channelID: String? = nil) {
+    private func parseBadges(badges: [SwiftTwitchAPI.Badge], channelID: String? = nil) {
         for badge in badges {
             for version in badge.versions {
                 Task {
@@ -144,7 +144,7 @@ class TwitchManager: ObservableObject {
         }
     }
     
-    private func parseEmotes(emotes: [SwiftTwitchAPI.EmoteResponse], channelID: String? = nil) {
+    private func parseEmotes(emotes: [SwiftTwitchAPI.Emote], channelID: String? = nil) {
         for emote in emotes {
             Task {
                 var parsedEmote = Emote(name: emote.name)

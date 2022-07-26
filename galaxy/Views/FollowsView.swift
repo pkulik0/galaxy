@@ -10,7 +10,7 @@ import SwiftTwitchAPI
 
 struct FollowsView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
-    @State private var selectedStream: SwiftTwitchAPI.StreamResponse?
+    @State private var selectedStream: SwiftTwitchAPI.Stream?
 
     var body: some View {
         NavigationView {

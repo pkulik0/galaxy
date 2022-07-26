@@ -11,7 +11,7 @@ import SwiftTwitchAPI
 
 struct StreamView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
-    @State var stream: SwiftTwitchAPI.StreamResponse
+    @State var stream: SwiftTwitchAPI.Stream
     
     @State private var streams: [String:String] = [:]
     @State private var quality = ""
