@@ -154,7 +154,7 @@ struct StreamView: View {
                     ScrollView {
                         LazyVStack(spacing: 3) {
                             ForEach(twitchManager.ircMessages) { message in
-                                ChatMessageView(message: message, channelID: stream.userID)
+                                ChatMessage(message: message, channelID: stream.userID)
                             }
                             Color.clear.id("bottom")
                         }
@@ -171,7 +171,7 @@ struct StreamView: View {
                     }
                     
                     if !lockChat {
-                        Button("Show latest messages.") {
+                        Button("Show latest messages") {
                             withAnimation {
                                 reader.scrollTo("bottom")
                             }
@@ -244,7 +244,7 @@ struct StreamView: View {
     }
     
     func fetchData() async {
-        guard let url = URL(string: "http://0.0.0.0:5000/\(stream.userLogin.lowercased())") else {
+        guard let url = URL(string: "http://192.168.1.53:5000/\(stream.userLogin.lowercased())") else {
             print("Invalid url")
             return
         }
