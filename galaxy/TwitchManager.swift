@@ -142,8 +142,8 @@ class TwitchManager: ObservableObject {
                 }
 
                 let parsedEmote = MessageElement.emote(name: emote.name, imageData: data, animated: false, provider: .twitch)
-                if let channelID = channelID, var channelEmotes = self.channelEmotes[channelID] {
-                    channelEmotes.append(parsedEmote)
+                if let channelID = channelID {
+                    self.channelEmotes[channelID]?.append(parsedEmote)
                 } else {
                     self.globalEmotes.append(parsedEmote)
                 }
@@ -161,8 +161,8 @@ class TwitchManager: ObservableObject {
                 }
                 
                 let parsedEmote = MessageElement.emote(name: emote.code, imageData: data, animated: emote.imageType == .gif, provider: .bttv)
-                if let channelID = channelID, var channelEmotes = self.channelEmotes[channelID] {
-                    channelEmotes.append(parsedEmote)
+                if let channelID = channelID {
+                    self.channelEmotes[channelID]?.append(parsedEmote)
                 } else {
                     self.globalEmotes.append(parsedEmote)
                 }
