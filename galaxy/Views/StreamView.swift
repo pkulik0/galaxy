@@ -164,17 +164,13 @@ struct StreamView: View {
                     .simultaneousGesture(chatGesture)
                     .onChange(of: twitchManager.ircMessages) { _ in
                         if lockChat {
-                            withAnimation {
-                                reader.scrollTo("bottom")
-                            }
+                            reader.scrollTo("bottom")
                         }
                     }
                     
                     if !lockChat {
                         Button("Show latest messages") {
-                            withAnimation {
-                                reader.scrollTo("bottom")
-                            }
+                            reader.scrollTo("bottom")
                             lockChat = true
                         }
                         .font(.subheadline)
