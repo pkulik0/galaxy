@@ -204,16 +204,15 @@ struct StreamView: View {
             HStack {
                 TextField("Say something...", text: $messageText)
                 Button {
-                    if let irc = twitchManager.irc {
+                    if let irc = twitchManager.irc, !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         irc.sendMessage(message: messageText, channel: stream.userLogin)
                         
-                        guard let identity = twitchManager.userIdentities[stream.userLogin] else {
-                            return
+                        if let identity = twitchManager.userIdentities[stream.userLogin] {
+                            let message = SwiftTwitchIRC.ChatMessage(text: messageText, userState: identity)
+                            twitchManager.receiveChatMessage(msg: message)
                         }
-                        let message = SwiftTwitchIRC.ChatMessage(text: messageText, userState: identity)
-                        twitchManager.receiveChatMessage(msg: message)
+                        messageText = ""
                     }
-                    messageText = ""
                 } label: {
                     Image(systemName: "paperplane.fill")
                 }
