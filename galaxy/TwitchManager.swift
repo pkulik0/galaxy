@@ -124,55 +124,28 @@ class TwitchManager: ObservableObject {
         }
     }
     
-    private func parseEmotes(emotes: [SwiftTwitchAPI.Emote], channelID: String? = nil) {
+    private func parseEmotes(emotes: [SwiftTwitchAPI.TEmote], channelID: String? = nil) {
         for emote in emotes {
-            let parsedEmote = MessageElement.emote(name: emote.name, url: emote.images.url2X)
+            var emoteURL = ""
+            emote.urls.forEach { urlEntry in
+                if urlEntry.size == .the1X || urlEntry.size == .the2X {
+                    emoteURL = urlEntry.url
+                }
+            }
+            let parsedEmote = MessageElement.emote(name: emote.code, url: emoteURL)
             if let channelID = channelID {
                 self.channelEmotes[channelID]?.append(parsedEmote)
             } else {
                 self.globalEmotes.append(parsedEmote)
             }
-        }
-    }
-    
-    private func parseEmotes(emotes: [SwiftTwitchAPI.BttvEmote], channelID: String? = nil) {
-        for emote in emotes {
-            let parsedEmote = MessageElement.emote(name: emote.code, url: emote.getUrlString(size: .the2X))
-            if let channelID = channelID {
-                self.channelEmotes[channelID]?.append(parsedEmote)
-            } else {
-                self.globalEmotes.append(parsedEmote)
-            }
-        }
-    }
-    
-    private func parseEmotes(emotes: [SwiftTwitchAPI.FFZEmote], channelID: String) {
-        for emote in emotes {
-            let parsedEmote = MessageElement.emote(name: emote.code, url: emote.images.the2X ?? emote.images.the1X)
-            channelEmotes[channelID]?.append(parsedEmote)
-        }
-    }
-    
-    private func parseEmotes(emotes: [SwiftTwitchAPI.SevenTVEmote], channelID: String) {
-        for emote in emotes {
-            let parsedEmote = MessageElement.emote(name: emote.name, url: emote.urls[1][1])
-            channelEmotes[channelID]?.append(parsedEmote)
         }
     }
     
     func fetchGlobalEmotes() {
-        api.getGlobalEmotes { result in
+        api.getAllGlobalEmotes { result in
             switch(result) {
-            case .success(let response):
-                self.parseEmotes(emotes: response.data)
-            case .failure(_):
-                print("handle me 5")
-            }
-        }
-        api.getBttvGlobalEmotes { result in
-            switch(result) {
-            case .success(let response):
-                self.parseEmotes(emotes: response)
+            case .success(let emotes):
+                self.parseEmotes(emotes: emotes)
                 break
             case .failure(_):
                 print("handle me 6")
@@ -186,37 +159,12 @@ class TwitchManager: ObservableObject {
         }
         channelEmotes[channelID] = []
         
-        api.getChannelEmotes(broadcasterID: channelID) { result in
+        api.getAllChannelEmotes(channelID: channelID) { result in
             switch(result) {
-            case .success(let response):
-                self.parseEmotes(emotes: response.data, channelID: channelID)
+            case .success(let emotes):
+                self.parseEmotes(emotes: emotes, channelID: channelID)
             case .failure(_):
                 print("handle me 7")
-            }
-        }
-        api.getBttvChannelData(channelID: channelID) { result in
-            switch(result) {
-            case .success(let response):
-                self.parseEmotes(emotes: response.channelEmotes, channelID: channelID)
-                self.parseEmotes(emotes: response.sharedEmotes, channelID: channelID)
-            case .failure(_):
-                print("handle me 8")
-            }
-        }
-        api.getFFZEmotes(channelID: channelID) { result in
-            switch(result) {
-            case .success(let response):
-                self.parseEmotes(emotes: response, channelID: channelID)
-            case .failure(_):
-                print("handle me 10")
-            }
-        }
-        api.getSevenTVEmotes(channelID: channelID) { result in
-            switch(result) {
-            case .success(let response):
-                self.parseEmotes(emotes: response, channelID: channelID)
-            case .failure(_):
-                print("handle me 11")
             }
         }
     }
