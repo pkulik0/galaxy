@@ -11,4 +11,5 @@ enum MessageElement: Equatable {
     case plain(text: String, color: Color)
     case emote(name: String, url: String)
     case badge(name: String, level: String, url: String)
+    case newLine
 }

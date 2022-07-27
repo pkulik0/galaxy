@@ -20,7 +20,12 @@ class TwitchManager: ObservableObject {
     @Published var followedStreams: [SwiftTwitchAPI.Stream] = []
     
     @Published var ircMessages: [SwiftTwitchIRC.ChatMessage] = []
+    @Published var deletedMessageIDs: [String] = []
     let bufferSize = 100
+    
+    @Published var notices: [SwiftTwitchIRC.Notice] = []
+    @Published var userNotices: [SwiftTwitchIRC.UserNotice] = []
+    @Published var whispers: [SwiftTwitchIRC.Whisper] = []
     
     var globalBadges: [MessageElement] = []
     var channelBadges: [String: [MessageElement]] = [:]
@@ -28,7 +33,8 @@ class TwitchManager: ObservableObject {
     var globalEmotes: [MessageElement] = []
     var channelEmotes: [String: [MessageElement]] = [:]
     
-    var userIdentities: [String: SwiftTwitchIRC.UserState] = [:]
+    var pendingMessages: [String: [String]] = [:]
+    var roomStates: [String: SwiftTwitchIRC.RoomState] = [:]
     
     init() {
         api.getUsers { result in
@@ -40,7 +46,7 @@ class TwitchManager: ObservableObject {
                     
                     getFollowedStreams()
                     let urlSession = URLSession(configuration: .default)
-                    irc = SwiftTwitchIRC(username: userResponse.login, token: "3184l994nsn2lgpq8gaup3oe3xifty", session: urlSession, onMessageReceived: receiveChatMessage, onWhisperReceived: nil, onNoticeReceived: nil, onUserNoticeReceived: nil, onUserStateChanged: saveUserIdentity, onRoomStateChanged: nil, onClearChat: nil, onClearMessage: nil)
+                    irc = SwiftTwitchIRC(username: userResponse.login, token: "3184l994nsn2lgpq8gaup3oe3xifty", session: urlSession, onMessageReceived: receiveChatMessage, onWhisperReceived: receiveWhisper, onNoticeReceived: receiveNotice, onUserNoticeReceived: receiveUserNotice, onUserStateChanged: handleUserState, onRoomStateChanged: saveRoomState, onClearChat: clearChat, onClearMessage: clearMessage)
                 }
             case .failure(_):
                 print("handle me 1")
@@ -51,22 +57,87 @@ class TwitchManager: ObservableObject {
         fetchGlobalEmotes()
     }
     
+    func receiveNotice(notice: SwiftTwitchIRC.Notice) {
+        let notice = SwiftTwitchIRC.ChatMessage(id: notice.id, chatroom: notice.chatroom, userID: "", userName: "", userLogin: "", badges: [:], color: "", text: notice.text)
+        
+        DispatchQueue.main.async {
+            self.ircMessages.append(notice)
+        }
+    }
+    
+    func receiveUserNotice(userNotice: SwiftTwitchIRC.UserNotice) {
+        let userNotice = SwiftTwitchIRC.ChatMessage(id: userNotice.id, chatroom: userNotice.chatroom, userID: "", userName: "", userLogin: "", badges: [:], color: "", text: userNotice.text)
+        
+        DispatchQueue.main.async {
+            self.ircMessages.append(userNotice)
+        }
+    }
+    
     func receiveChatMessage(msg: SwiftTwitchIRC.ChatMessage) {
         DispatchQueue.main.async { [self] in
             ircMessages.append(msg)
             if ircMessages.count > bufferSize {
-                ircMessages.remove(at: 0)
+                let removedMessage = ircMessages.remove(at: 0)
+                deletedMessageIDs.removeAll(where: { $0 == removedMessage.id })
             }
         }
     }
     
-    func saveUserIdentity(data: SwiftTwitchIRC.UserState) {
+    func receiveWhisper(whisper: SwiftTwitchIRC.Whisper) {
         DispatchQueue.main.async {
-            self.userIdentities[data.chatroom] = data
+            self.whispers.append(whisper)
         }
     }
     
-    func getImageURL(urlString: String, width: Int, height: Int) -> URL? {
+    func handleUserState(userState: SwiftTwitchIRC.UserState) {
+        guard let messageID = userState.messageID,
+              let userID = user?.id,
+              let text = pendingMessages[userState.chatroom]?.first
+        else {
+            return
+        }
+    
+        let message = SwiftTwitchIRC.ChatMessage(id: messageID, chatroom: userState.chatroom, userID: userID, userName: userState.userName, userLogin: userState.userName, badges: userState.badges, color: userState.color, text: text)
+        
+        DispatchQueue.main.async {
+            self.ircMessages.append(message)
+        }
+        
+        pendingMessages[userState.chatroom]?.removeFirst()
+    }
+    
+    func saveRoomState(roomState: SwiftTwitchIRC.RoomState) {
+        DispatchQueue.main.async {
+            self.roomStates[roomState.chatroom] = roomState
+        }
+    }
+    
+    func clearChat(clearChatInfo: SwiftTwitchIRC.ClearChat) {
+        guard let targetUserID = clearChatInfo.targetUserID else {
+            let clearChat = SwiftTwitchIRC.ChatMessage(id: clearChatInfo.id, chatroom: clearChatInfo.chatroom, userID: "", userName: "", userLogin: "", badges: [:], color: "", text: "The chat was cleared by a moderator.")
+            DispatchQueue.main.async {
+                self.ircMessages = [clearChat]
+                self.deletedMessageIDs = []
+            }
+            return
+        }
+
+        for msg in ircMessages {
+            if clearChatInfo.chatroom == msg.chatroom, targetUserID == msg.userID {
+                DispatchQueue.main.async {
+                    self.deletedMessageIDs.append(msg.id)
+                }
+            }
+        }
+    }
+    
+    func clearMessage(clearMessageInfo: SwiftTwitchIRC.ClearMessage) {
+        DispatchQueue.main.async {
+            self.deletedMessageIDs.append(clearMessageInfo.targetMessageID)
+        }
+    }
+    
+    func getThumbnailURL(urlString: String, width: Int, height: Int) -> URL? {
         let urlString = urlString
             .replacingOccurrences(of: "{width}", with: "\(width)")
             .replacingOccurrences(of: "{height}", with: "\(height)")
@@ -137,6 +208,7 @@ class TwitchManager: ObservableObject {
             emote.urls.forEach { urlEntry in
                 if urlEntry.size == .the1X || urlEntry.size == .the2X {
                     emoteURL = urlEntry.url
+                    return
                 }
             }
             let parsedEmote = MessageElement.emote(name: emote.code, url: emoteURL)

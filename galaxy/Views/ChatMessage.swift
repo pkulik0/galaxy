@@ -21,18 +21,28 @@ struct ChatMessage: View {
     
     func parseMessage() {
         parsedMessage = []
-        for (name, level) in message.badges.sorted(by: <) {
-            let badge = twitchManager.getBadge(name: name, level: String(level), channelID: channelID)
-            guard let badge = badge else {
+        let isSystemMessage = message.userLogin.isEmpty
+        
+        if !isSystemMessage {
+            for (name, level) in message.badges.sorted(by: <) {
+                let badge = twitchManager.getBadge(name: name, level: String(level), channelID: channelID)
+                guard let badge = badge else {
+                    return
+                }
+
+                parsedMessage.append(badge)
+            }
+            
+            let userColor = Color.fromHexString(hex: message.color, nickname: message.userName, isDarkMode: colorScheme == .dark)
+            let username = MessageElement.plain(text: "\(message.displayableName): ", color: userColor)
+            parsedMessage.append(username)
+            
+            if twitchManager.deletedMessageIDs.contains(message.id) {
+                let deletedMessage = MessageElement.plain(text: "<Deleted message>", color: .secondary)
+                parsedMessage.append(deletedMessage)
                 return
             }
-
-            parsedMessage.append(badge)
         }
-        
-        let userColor = Color.fromHexString(hex: message.color, nickname: message.userName, isDarkMode: colorScheme == .dark)
-        let username = MessageElement.plain(text: "\(message.displayableName): ", color: userColor)
-        parsedMessage.append(username)
         
         for word in message.text.split(separator: " ") {
             let word = String(word)
@@ -40,7 +50,7 @@ struct ChatMessage: View {
             if let emote = twitchManager.getEmote(name: word, channelID: channelID) {
                 parsedMessage.append(emote)
             } else {
-                let plainText = MessageElement.plain(text: "\(word) ", color: .primary)
+                let plainText = MessageElement.plain(text: "\(word) ", color: isSystemMessage ? .secondary : .primary)
                 parsedMessage.append(plainText)
             }
         }
@@ -65,12 +75,20 @@ struct ChatMessage: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 20)
                     .padding(.trailing, 3)
+            case .newLine:
+                NewLine()
             }
         }
         .fixedSize(horizontal: false, vertical: true)
         .font(.subheadline)
         .onAppear {
             parseMessage()
+        }
+        .onChange(of: twitchManager.deletedMessageIDs) { deletedMessagesIDs in
+            if deletedMessagesIDs.contains(message.id) {
+                print("i was deleted")
+                parseMessage()
+            }
         }
     }
 }

@@ -186,6 +186,7 @@ struct StreamView: View {
             .onAppear {
                 if let irc = twitchManager.irc {
                     twitchManager.ircMessages = []
+                    twitchManager.deletedMessageIDs = []
                     irc.joinChatroom(stream.userLogin)
                 }
                 twitchManager.fetchChannelBadges(channelID: stream.userID)
@@ -203,17 +204,8 @@ struct StreamView: View {
             
             HStack {
                 TextField("Say something...", text: $messageText)
-                Button {
-                    if let irc = twitchManager.irc, !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        irc.sendMessage(message: messageText, channel: stream.userLogin)
-                        
-                        if let identity = twitchManager.userIdentities[stream.userLogin] {
-                            let message = SwiftTwitchIRC.ChatMessage(text: messageText, userState: identity)
-                            twitchManager.receiveChatMessage(msg: message)
-                        }
-                        messageText = ""
-                    }
-                } label: {
+                    .onSubmit(sendMessage)
+                Button(action: sendMessage) {
                     Image(systemName: "paperplane.fill")
                 }
                 .buttonStyle(.plain)
@@ -225,6 +217,21 @@ struct StreamView: View {
         .task {
             await fetchData()
         }
+    }
+    
+    func sendMessage() {
+        guard let irc = twitchManager.irc, !messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return
+        }
+        
+        irc.sendMessage(message: messageText, channel: stream.userLogin)
+        
+        if !twitchManager.pendingMessages.keys.contains(stream.userID) {
+            twitchManager.pendingMessages[stream.userLogin] = []
+        }
+        twitchManager.pendingMessages[stream.userLogin]?.append(messageText)
+        
+        messageText = ""
     }
     
     func updatePlayer() {

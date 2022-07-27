@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftTwitchAPI
+import SDWebImageSwiftUI
 
 struct FollowsView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
@@ -19,9 +20,10 @@ struct FollowsView: View {
                     ForEach(twitchManager.followedStreams) { stream in
                         HStack {
                             ZStack(alignment: .bottomLeading) {
-                                AsyncImage(url: twitchManager.getImageURL(urlString: stream.thumbnailURL, width: 150, height: 85)) { phase in
+                                AsyncImage(url: twitchManager.getThumbnailURL(urlString: stream.thumbnailURL, width: 300, height: 170)) { phase in
                                     if let image = phase.image {
                                         image
+                                            .resizable()
                                     } else if phase.error != nil {
                                         Image(systemName: "exclamationmark")
                                     } else {
