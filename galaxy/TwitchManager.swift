@@ -27,7 +27,8 @@ class TwitchManager: ObservableObject {
     
     var globalEmotes: [MessageElement] = []
     var channelEmotes: [String: [MessageElement]] = [:]
-
+    
+    var userIdentities: [String: SwiftTwitchIRC.UserState] = [:]
     
     init() {
         api.getUsers { result in
@@ -39,7 +40,7 @@ class TwitchManager: ObservableObject {
                     
                     getFollowedStreams()
                     let urlSession = URLSession(configuration: .default)
-                    irc = SwiftTwitchIRC(username: userResponse.login, token: "3184l994nsn2lgpq8gaup3oe3xifty", session: urlSession, onMessageReceived: receiveChatMessage, onWhisperReceived: nil, onNoticeReceived: nil, onUserNoticeReceived: nil, onUserStateChanged: nil, onRoomStateChanged: nil, onClearChat: nil, onClearMessage: nil)
+                    irc = SwiftTwitchIRC(username: userResponse.login, token: "3184l994nsn2lgpq8gaup3oe3xifty", session: urlSession, onMessageReceived: receiveChatMessage, onWhisperReceived: nil, onNoticeReceived: nil, onUserNoticeReceived: nil, onUserStateChanged: saveUserIdentity, onRoomStateChanged: nil, onClearChat: nil, onClearMessage: nil)
                 }
             case .failure(_):
                 print("handle me 1")
@@ -56,6 +57,12 @@ class TwitchManager: ObservableObject {
             if ircMessages.count > bufferSize {
                 ircMessages.remove(at: 0)
             }
+        }
+    }
+    
+    func saveUserIdentity(data: SwiftTwitchIRC.UserState) {
+        DispatchQueue.main.async {
+            self.userIdentities[data.chatroom] = data
         }
     }
     

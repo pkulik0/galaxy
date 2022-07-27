@@ -8,6 +8,7 @@
 import SwiftUI
 import AVKit
 import SwiftTwitchAPI
+import SwiftTwitchIRC
 
 struct StreamView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
@@ -205,6 +206,12 @@ struct StreamView: View {
                 Button {
                     if let irc = twitchManager.irc {
                         irc.sendMessage(message: messageText, channel: stream.userLogin)
+                        
+                        guard let identity = twitchManager.userIdentities[stream.userLogin] else {
+                            return
+                        }
+                        let message = SwiftTwitchIRC.ChatMessage(text: messageText, userState: identity)
+                        twitchManager.receiveChatMessage(msg: message)
                     }
                     messageText = ""
                 } label: {
