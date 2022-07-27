@@ -52,13 +52,12 @@ struct ChatMessage: View {
             case .plain(text: let text, color: let color):
                 Text(text)
                     .foregroundColor(color)
-                    .frame(height: 25)
             case .emote(_, url: let url):
                 AnimatedImage(url: URL(string: url))
                     .resizable()
                     .playbackMode(.bounce)
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 25)
+                    .frame(height: 30)
                     .padding(.trailing, 3)
             case .badge(_, _, url: let urlString):
                 WebImage(url: URL(string: urlString))
