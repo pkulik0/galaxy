@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftTwitchAPI
+import SDWebImage
 
 @main
 struct galaxyApp: App {
@@ -16,6 +17,9 @@ struct galaxyApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(twitchManager)
+                .onAppear {
+                    SDImageCodersManager.shared.addCoder(SDImageAWebPCoder.shared)
+                }
         }
     }
 }

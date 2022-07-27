@@ -152,13 +152,13 @@ struct StreamView: View {
             ScrollViewReader { reader in
                 ZStack(alignment: .bottom) {
                     ScrollView {
-                        LazyVStack(spacing: 3) {
+                        LazyVStack(spacing: 5) {
                             ForEach(twitchManager.ircMessages) { message in
                                 ChatMessage(message: message, channelID: stream.userID)
                             }
                             Color.clear.id("bottom")
                         }
-                        .padding(.horizontal)
+                        .padding(.leading, 5)
                         .frame(maxWidth: .infinity)
                     }
                     .simultaneousGesture(chatGesture)

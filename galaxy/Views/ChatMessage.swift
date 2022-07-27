@@ -8,10 +8,13 @@
 import SwiftUI
 import SwiftTwitchIRC
 import WrappingHStack
+import SDWebImageSwiftUI
 
 struct ChatMessage: View {
     @EnvironmentObject private var twitchManager: TwitchManager
     @State private var parsedMessage: [MessageElement] = []
+    
+    @Environment(\.colorScheme) private var colorScheme
     
     let message: SwiftTwitchIRC.ChatMessage
     let channelID: String
@@ -27,7 +30,7 @@ struct ChatMessage: View {
             parsedMessage.append(badge)
         }
         
-        let userColor = Color.fromHexString(hex: message.color, nickname: message.userName)
+        let userColor = Color.fromHexString(hex: message.color, nickname: message.userName, isDarkMode: colorScheme == .dark)
         let username = MessageElement.plain(text: "\(message.displayableName): ", color: userColor)
         parsedMessage.append(username)
         
@@ -49,35 +52,24 @@ struct ChatMessage: View {
             case .plain(text: let text, color: let color):
                 Text(text)
                     .foregroundColor(color)
-            case .emote(name: let name, imageData: let imageData, animated: let animated, provider: let provider):
-                if animated {
-                    GIFImage(data: imageData, speed: provider == EmoteProvider.sevenTv ? 15.0 : 1.0)
-                        .frame(width: 32, height: 32)
-                        .padding(.trailing, 3)
-                } else if let uiImage = UIImage(data: imageData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 32, height: 32)
-                        .padding(.trailing, 3)
-                } else {
-                    Text(name)
-                        .foregroundColor(.red)
-                }
-            case .badge(name: let name, level: _, imageData: let imageData):
-                if let uiImage = UIImage(data: imageData) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .frame(width: 20, height: 20)
-                        .padding(.trailing, 3)
-                } else {
-                    Text(name)
-                        .foregroundColor(.red)
-                }
+                    .frame(height: 25)
+            case .emote(_, url: let url):
+                AnimatedImage(url: URL(string: url))
+                    .resizable()
+                    .playbackMode(.bounce)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 25)
+                    .padding(.trailing, 3)
+            case .badge(_, _, url: let urlString):
+                WebImage(url: URL(string: urlString))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(height: 20)
+                    .padding(.trailing, 3)
             }
         }
         .fixedSize(horizontal: false, vertical: true)
-        .font(.body)
+        .font(.subheadline)
         .onAppear {
             parseMessage()
         }
