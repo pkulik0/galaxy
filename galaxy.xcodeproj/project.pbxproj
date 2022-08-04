@@ -15,6 +15,7 @@
 		89AB71212887403700B64BC7 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB71202887403700B64BC7 /* ChatMessage.swift */; };
 		89AB71232888145B00B64BC7 /* DiscoverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89AB71222888145B00B64BC7 /* DiscoverView.swift */; };
 		89AB712928884FD300B64BC7 /* WrappingHStack in Frameworks */ = {isa = PBXBuildFile; productRef = 89AB712828884FD300B64BC7 /* WrappingHStack */; };
+		89F9019D289AA9BA00BFB5CF /* StreamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89F9019C289AA9BA00BFB5CF /* StreamViewModel.swift */; };
 		89FAAE44288EF33000AAD630 /* SwiftTwitchIRC in Frameworks */ = {isa = PBXBuildFile; productRef = 89FAAE43288EF33000AAD630 /* SwiftTwitchIRC */; };
 		89FAAE49288EF59E00AAD630 /* SwiftTwitchAPI in Frameworks */ = {isa = PBXBuildFile; productRef = 89FAAE48288EF59E00AAD630 /* SwiftTwitchAPI */; };
 		89FAAE552890109F00AAD630 /* MessageContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89FAAE542890109F00AAD630 /* MessageContent.swift */; };
@@ -36,6 +37,7 @@
 		89AB711B28870AAE00B64BC7 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		89AB71202887403700B64BC7 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
 		89AB71222888145B00B64BC7 /* DiscoverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverView.swift; sourceTree = "<group>"; };
+		89F9019C289AA9BA00BFB5CF /* StreamViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamViewModel.swift; sourceTree = "<group>"; };
 		89FAAE542890109F00AAD630 /* MessageContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageContent.swift; sourceTree = "<group>"; };
 		D6F86841286A477C00EFAFCE /* galaxy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = galaxy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D6F86844286A477C00EFAFCE /* galaxyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = galaxyApp.swift; sourceTree = "<group>"; };
@@ -72,10 +74,9 @@
 		89810FF22884253E0010C9EC /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				D6F86846286A477C00EFAFCE /* StreamView.swift */,
+				89F9019B289AA9A800BFB5CF /* StreamView */,
 				89810FF0288425350010C9EC /* FollowsView.swift */,
 				89810FF328842ABD0010C9EC /* RootView.swift */,
-				89AB71202887403700B64BC7 /* ChatMessage.swift */,
 				89AB71222888145B00B64BC7 /* DiscoverView.swift */,
 			);
 			path = Views;
@@ -88,6 +89,16 @@
 				89AB711B28870AAE00B64BC7 /* Color.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		89F9019B289AA9A800BFB5CF /* StreamView */ = {
+			isa = PBXGroup;
+			children = (
+				D6F86846286A477C00EFAFCE /* StreamView.swift */,
+				89F9019C289AA9BA00BFB5CF /* StreamViewModel.swift */,
+				89AB71202887403700B64BC7 /* ChatMessage.swift */,
+			);
+			path = StreamView;
 			sourceTree = "<group>";
 		};
 		D6F86838286A477C00EFAFCE = {
@@ -220,6 +231,7 @@
 				89AB71212887403700B64BC7 /* ChatMessage.swift in Sources */,
 				D6F86847286A477C00EFAFCE /* StreamView.swift in Sources */,
 				89810FF1288425350010C9EC /* FollowsView.swift in Sources */,
+				89F9019D289AA9BA00BFB5CF /* StreamViewModel.swift in Sources */,
 				89AB711C28870AAE00B64BC7 /* Color.swift in Sources */,
 				89810FF6288452B80010C9EC /* Int.swift in Sources */,
 				89AB71232888145B00B64BC7 /* DiscoverView.swift in Sources */,

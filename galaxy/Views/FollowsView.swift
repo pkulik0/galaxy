@@ -66,7 +66,12 @@ struct FollowsView: View {
             }
             .frame(maxWidth: .infinity)
             .fullScreenCover(item: $selectedStream) { stream in
-                StreamView(stream: stream)
+                if let user = twitchManager.user {
+                    StreamView(stream: stream, user: user).onAppear {
+                        twitchManager.fetchChannelBadges(channelID: stream.userID)
+                        twitchManager.fetchChannelEmotes(channelID: stream.userID)
+                    }
+                }
             }
             .navigationBarTitle("Following")
         }

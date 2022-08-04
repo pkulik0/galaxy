@@ -12,6 +12,7 @@ import SDWebImageSwiftUI
 
 struct ChatMessage: View {
     @EnvironmentObject private var twitchManager: TwitchManager
+    @Binding var deletedMessagesIDs: [String]
     @State private var parsedMessage: [MessageElement] = []
     
     @Environment(\.colorScheme) private var colorScheme
@@ -37,7 +38,7 @@ struct ChatMessage: View {
             let username = MessageElement.plain(text: "\(message.displayableName): ", color: userColor)
             parsedMessage.append(username)
             
-            if twitchManager.deletedMessageIDs.contains(message.id) {
+            if deletedMessagesIDs.contains(message.id) {
                 let deletedMessage = MessageElement.plain(text: "<Deleted message>", color: .secondary)
                 parsedMessage.append(deletedMessage)
                 return
@@ -84,9 +85,8 @@ struct ChatMessage: View {
         .onAppear {
             parseMessage()
         }
-        .onChange(of: twitchManager.deletedMessageIDs) { deletedMessagesIDs in
+        .onChange(of: deletedMessagesIDs) { deletedMessagesIDs in
             if deletedMessagesIDs.contains(message.id) {
-                print("i was deleted")
                 parseMessage()
             }
         }
