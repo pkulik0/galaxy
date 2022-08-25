@@ -17,6 +17,7 @@ class TwitchManager: ObservableObject {
     @Published var user: SwiftTwitchAPI.User?
     @Published var followedStreams: [SwiftTwitchAPI.Stream] = []
     
+    @Published var topStreams: [SwiftTwitchAPI.Stream] = []
     @Published var topCategories: [SwiftTwitchAPI.Category] = []
     
     var globalBadges: [MessageElement] = []
@@ -34,6 +35,17 @@ class TwitchManager: ObservableObject {
                 }
             case .failure(_):
                 print("handle me 8")
+            }
+        }
+        
+        api.getStreams { result in
+            switch(result) {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.topStreams = response.data
+                }
+            case .failure(_):
+                print("handle me 9")
             }
         }
         

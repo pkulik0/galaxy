@@ -12,22 +12,29 @@ struct DiscoverView: View {
     
     var body: some View {
         NavigationView {
-            VStack(alignment: .leading) {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(alignment: .top) {
-                        ForEach(twitchManager.topCategories) { category in
-                            CategoryView(category: category)
+            ScrollView(.vertical, showsIndicators: true) {
+                VStack(alignment: .leading) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(alignment: .top) {
+                            ForEach(twitchManager.topCategories) { category in
+                                CategoryView(category: category)
+                            }
+                        }
+                        .padding()
+                        .fixedSize()
+                    }
+                    
+                    Text("Streams")
+                        .font(.title2.bold())
+                        .padding(.horizontal)
+                    
+                    LazyVStack(alignment: .leading) {
+                        ForEach(twitchManager.topStreams) { stream in
+                            StreamView(stream: stream)
                         }
                     }
                     .padding()
-                    .fixedSize()
                 }
-                
-                Text("Streams")
-                    .font(.title2.bold())
-                    .padding(.horizontal)
-                
-                Spacer()
             }
             .navigationTitle("Discover")
         }
