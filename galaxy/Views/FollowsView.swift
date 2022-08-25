@@ -12,6 +12,8 @@ import SDWebImageSwiftUI
 struct FollowsView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
     @State private var selectedStream: SwiftTwitchAPI.Stream?
+    
+    private let thumbnailSize: (Int, Int) = (150, 85)
 
     var body: some View {
         NavigationView {
@@ -20,7 +22,7 @@ struct FollowsView: View {
                     ForEach(twitchManager.followedStreams) { stream in
                         HStack {
                             ZStack(alignment: .bottomLeading) {
-                                AsyncImage(url: twitchManager.getThumbnailURL(urlString: stream.thumbnailURL, width: 300, height: 170)) { phase in
+                                AsyncImage(url: TwitchManager.getThumbnailURL(urlString: stream.thumbnailURL, width: thumbnailSize.0 * 2, height: thumbnailSize.1 * 2)) { phase in
                                     if let image = phase.image {
                                         image
                                             .resizable()
@@ -30,7 +32,7 @@ struct FollowsView: View {
                                         ProgressView()
                                     }
                                 }
-                                    .frame(width: 150, height: 85)
+                                .frame(width: CGFloat(thumbnailSize.0), height: CGFloat(thumbnailSize.1))
                                 
                                 HStack(spacing: 5) {
                                     Circle()

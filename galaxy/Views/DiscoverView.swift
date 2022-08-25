@@ -11,14 +11,25 @@ struct DiscoverView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
     
     var body: some View {
-        VStack {
-            Text("To be implemeted.")
+        NavigationView {
+            VStack(alignment: .leading) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(alignment: .top) {
+                        ForEach(twitchManager.topCategories) { category in
+                            CategoryView(category: category)
+                        }
+                    }
+                    .padding()
+                    .fixedSize()
+                }
+                
+                Text("Streams")
+                    .font(.title2.bold())
+                    .padding(.horizontal)
+                
+                Spacer()
+            }
+            .navigationTitle("Discover")
         }
-    }
-}
-
-struct DiscoverView_Previews: PreviewProvider {
-    static var previews: some View {
-        DiscoverView()
     }
 }

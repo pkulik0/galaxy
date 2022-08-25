@@ -10,13 +10,14 @@ import SwiftTwitchAPI
 import SwiftTwitchIRC
 import Dispatch
 import Foundation
-import UIKit
 
 class TwitchManager: ObservableObject {
     let api = SwiftTwitchAPI(clientID: "thffseh4mtlmaqnd89rm17ugso8s30", authToken: "3184l994nsn2lgpq8gaup3oe3xifty")
     
     @Published var user: SwiftTwitchAPI.User?
     @Published var followedStreams: [SwiftTwitchAPI.Stream] = []
+    
+    @Published var topCategories: [SwiftTwitchAPI.Category] = []
     
     var globalBadges: [MessageElement] = []
     var channelBadges: [String: [MessageElement]] = [:]
@@ -25,6 +26,17 @@ class TwitchManager: ObservableObject {
     var channelEmotes: [String: [MessageElement]] = [:]
     
     init() {
+        api.getTopCategories { result in
+            switch(result) {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self.topCategories = response.data
+                }
+            case .failure(_):
+                print("handle me 8")
+            }
+        }
+        
         api.getUsers { result in
             switch(result) {
             case .success(let response):
@@ -41,7 +53,7 @@ class TwitchManager: ObservableObject {
         fetchGlobalEmotes()
     }
     
-    func getThumbnailURL(urlString: String, width: Int, height: Int) -> URL? {
+    static func getThumbnailURL(urlString: String, width: Int, height: Int) -> URL? {
         let urlString = urlString
             .replacingOccurrences(of: "{width}", with: "\(width)")
             .replacingOccurrences(of: "{height}", with: "\(height)")
