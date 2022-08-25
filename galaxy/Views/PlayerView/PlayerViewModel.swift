@@ -1,5 +1,5 @@
 //
-//  StreamViewModel.swift
+//  PlayerViewModel.swift
 //  galaxy
 //
 //  Created by pkulik0 on 03/08/2022.
@@ -10,7 +10,7 @@ import SwiftTwitchIRC
 import SwiftTwitchAPI
 import AVKit
 
-extension StreamView {
+extension PlayerView {
     class ViewModel: ObservableObject {
         @Published var stream: SwiftTwitchAPI.Stream
         var user: SwiftTwitchAPI.User

@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  PlayerView.swift
 //  galaxy
 //
 //  Created by pkulik0 on 27/06/2022.
@@ -10,7 +10,7 @@ import AVKit
 import SwiftTwitchAPI
 import SwiftTwitchIRC
 
-struct StreamView: View {
+struct PlayerView: View {
     @StateObject private var viewModel: ViewModel
     @Environment(\.dismiss) private var dismiss
     
