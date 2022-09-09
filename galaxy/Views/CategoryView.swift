@@ -19,7 +19,7 @@ struct CategoryView: View {
             WebImage(url: TwitchManager.getThumbnailURL(urlString: category.boxArtUrl, width: thumnailSize.0, height: thumnailSize.1))
 
             Text(category.name)
-                .font(.body)
+                .font(.headline)
         }
         .frame(width: CGFloat(thumnailSize.0))
     }

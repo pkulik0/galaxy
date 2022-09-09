@@ -18,33 +18,6 @@ struct PlayerView: View {
         _viewModel = StateObject(wrappedValue: ViewModel(stream: stream, user: user, token: "3184l994nsn2lgpq8gaup3oe3xifty"))
     }
     
-    var dragToClose: some Gesture {
-        DragGesture()
-            .onEnded { [self] value in
-                if value.translation.height > 100 {
-                    dismiss()
-                } else {
-                    viewModel.dragOffset = .zero
-                }
-            }
-            .onChanged { [self] value in
-                withAnimation {
-                    if value.translation.height > 0 {
-                        viewModel.dragOffset.height = value.translation.height
-                    }
-                }
-            }
-    }
-    
-    var chatGesture: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                if value.translation.height > 0 {
-                    viewModel.lockChat = false
-                }
-            }
-    }
-    
     var body: some View {
         VStack(alignment: .leading) {
             Group {
@@ -177,6 +150,33 @@ struct PlayerView: View {
             viewModel.resetQuality()
             print(viewModel.streams)
         }
+    }
+    
+    var dragToClose: some Gesture {
+        DragGesture()
+            .onEnded { [self] value in
+                if value.translation.height > 100 {
+                    dismiss()
+                } else {
+                    viewModel.dragOffset = .zero
+                }
+            }
+            .onChanged { [self] value in
+                withAnimation {
+                    if value.translation.height > 0 {
+                        viewModel.dragOffset.height = value.translation.height
+                    }
+                }
+            }
+    }
+    
+    var chatGesture: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                if value.translation.height > 0 {
+                    viewModel.lockChat = false
+                }
+            }
     }
 }
 

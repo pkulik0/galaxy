@@ -26,6 +26,13 @@ struct RootView: View {
                     Text("Discover")
                 }
                 .tag("discover")
+            
+            SearchView()
+                .tabItem {
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
+                }
+                .tag("Search")
         }
     }
 }

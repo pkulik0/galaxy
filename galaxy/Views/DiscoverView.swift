@@ -6,9 +6,17 @@
 //
 
 import SwiftUI
+import SwiftTwitchAPI
 
 struct DiscoverView: View {
     @EnvironmentObject private var twitchManager: TwitchManager
+    
+    @State private var topCategories: [SwiftTwitchAPI.Category] = []
+    
+    @State private var topStreams: [SwiftTwitchAPI.Stream] = []
+    @State private var paginationCursor: String?
+    
+    @State private var selectedStream: SwiftTwitchAPI.Stream?
     
     var body: some View {
         NavigationView {
@@ -16,7 +24,7 @@ struct DiscoverView: View {
                 VStack(alignment: .leading) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(alignment: .top) {
-                            ForEach(twitchManager.topCategories) { category in
+                            ForEach(topCategories) { category in
                                 CategoryView(category: category)
                             }
                         }
@@ -24,19 +32,92 @@ struct DiscoverView: View {
                         .fixedSize()
                     }
                     
-                    Text("Streams")
-                        .font(.title2.bold())
+                    Divider()
                         .padding(.horizontal)
                     
-                    LazyVStack(alignment: .leading) {
-                        ForEach(twitchManager.topStreams) { stream in
-                            StreamView(stream: stream)
+                    VStack(alignment: .leading) {
+                        Text("Streams")
+                            .font(.title2.bold())
+                        
+                        HStack(spacing: 5) {
+                            Text("Filters: ")
+                                .font(.caption)
+                            
+                            Button {
+                                print("FILTER SELECTION")
+                            } label: {
+                                Label("Add filter", systemImage: "plus")
+                                    .font(.caption)
+                                    .labelStyle(.iconOnly)
+                                    .padding(5)
+                            }
+                            .background(Color.secondary.opacity(0.3))
+                            .clipShape(Circle())
+                            .buttonStyle(.plain)
+                        }
+                        .padding(.bottom)
+                        
+                        LazyVStack(alignment: .leading) {
+                            ForEach(topStreams) { stream in
+                                StreamView(stream: stream).onTapGesture {
+                                    selectedStream = stream
+                                }
+                            }
+                            Color.clear.onAppear {
+                                getStreams()
+                            }
                         }
                     }
                     .padding()
                 }
             }
             .navigationTitle("Discover")
+            .onAppear(perform: refresh)
+            .refreshable {
+                topStreams = []
+                paginationCursor = nil
+                refresh()
+            }
+            .fullScreenCover(item: $selectedStream) { stream in
+                if let user = twitchManager.user {
+                    PlayerView(stream: stream, user: user).onAppear {
+                        twitchManager.fetchChannelBadges(channelID: stream.userID)
+                        twitchManager.fetchChannelEmotes(channelID: stream.userID)
+                    }
+                }
+            }
+        }
+    }
+    
+    func refresh() {
+        getCategories()
+        getStreams()
+    }
+    
+    func getCategories() {
+        twitchManager.api.getTopCategories { result in
+            switch(result) {
+            case .success(let result):
+                DispatchQueue.main.async {
+                    self.topCategories = result.data
+                }
+            case .failure(_):
+                print("handle me")
+            }
+        }
+    }
+    
+    func getStreams() {
+        twitchManager.api.getStreams(after: paginationCursor, first: 100) { result in
+            switch(result) {
+            case .success(let result):
+                DispatchQueue.main.async {
+                    self.topStreams += result.data
+                }
+                self.paginationCursor = result.pagination?.cursor
+            case .failure(_):
+                print("handle me")
+            }
         }
     }
 }
