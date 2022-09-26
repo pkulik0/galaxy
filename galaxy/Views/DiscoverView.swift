@@ -108,7 +108,7 @@ struct DiscoverView: View {
     }
     
     func getStreams() {
-        twitchManager.api.getStreams(after: paginationCursor, first: 100) { result in
+        twitchManager.api.getStreams(after: paginationCursor) { result in
             switch(result) {
             case .success(let result):
                 DispatchQueue.main.async {

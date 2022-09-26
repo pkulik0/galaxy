@@ -12,13 +12,10 @@ import Dispatch
 import Foundation
 
 class TwitchManager: ObservableObject {
-    let api = SwiftTwitchAPI(clientID: "thffseh4mtlmaqnd89rm17ugso8s30", authToken: "3184l994nsn2lgpq8gaup3oe3xifty")
+    let api = SwiftTwitchAPI(clientID: "<client-id>", authToken: "<token>")
     
     @Published var user: SwiftTwitchAPI.User?
     @Published var followedStreams: [SwiftTwitchAPI.Stream] = []
-    
-    @Published var topStreams: [SwiftTwitchAPI.Stream] = []
-    @Published var topCategories: [SwiftTwitchAPI.Category] = []
     
     var globalBadges: [MessageElement] = []
     var channelBadges: [String: [MessageElement]] = [:]
@@ -27,28 +24,6 @@ class TwitchManager: ObservableObject {
     var channelEmotes: [String: [MessageElement]] = [:]
     
     init() {
-        api.getTopCategories { result in
-            switch(result) {
-            case .success(let response):
-                DispatchQueue.main.async {
-                    self.topCategories = response.data
-                }
-            case .failure(_):
-                print("handle me 8")
-            }
-        }
-        
-        api.getStreams { result in
-            switch(result) {
-            case .success(let response):
-                DispatchQueue.main.async {
-                    self.topStreams = response.data
-                }
-            case .failure(_):
-                print("handle me 9")
-            }
-        }
-        
         api.getUsers { result in
             switch(result) {
             case .success(let response):
